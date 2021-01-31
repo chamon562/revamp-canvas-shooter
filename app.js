@@ -33,8 +33,13 @@ class Player{
         ctx.fill();
     }
 }
+// want to make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
+const x = canvas.width / 2;
+const y = canvas.height / 2;
 // now that I have my player class I can create a new instance of the player called new and specify Player 
 // and the constrcutor method give it some properties
-const player = new Player(100, 100, 30, "blue");
-console.log(player);
+const player = new Player(x, y, 30, "blue");
+// console.log(player);
+// this lets me see the circle on screen by calling player.draw();
+// the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
 player.draw();
