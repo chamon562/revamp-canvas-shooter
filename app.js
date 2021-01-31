@@ -75,6 +75,13 @@ const player = new Player(x, y, 30, "blue");
 player.draw();
 
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
+// no animation yet intill there is an anmiation loop
+//this will be called over and over again to give the illusion of a moving object
+function animate(){
+    requestAnimationFrame(animate);
+    console.log("calling animte function")
+}
+
 // want to add an event listener on mousedown or click
 // little strick found that you can get rid of window and just leave it as addEventListener because the window will already know to clean up code. 
 // want projectile to fire wherever my mouse is so I must get the x and y coordiante of it wherever i click to move that way. 
@@ -87,9 +94,19 @@ addEventListener("click", (event) => {
     // also gives me the properties related to where my mouse was wherever I click on screen. clientX clientY
     // so now I know my event.clientX and event.clientY as my arguments for my projectile.
     console.log(event);
-    console.log("clientX:", event.clientX, "clientY:", event.clientY );
-    const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null);
+    console.log("clientX:", event.clientX, "clientY:", event.clientY);
+    // this shows projectile on click wherever on the screen
+    // const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null); 
+    // this starts the projectile from the center of the screen need to connect to player later 
+    const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', null);
     // console.log("your are clicking");
     // to draw the projectile on click get the projectile variable that stores its properies then .draw() function
+    // now projectile shows by just making a static dot when i click the sreen, next how can get it to move.
+    // determine x and y velocity that pushes up to the point of click
+    // gotta get the angle, then put in atan2 function and is what produces the angle get x and y put in atan2
+    // atan(x, y) = angle, atain()** , once got angle in radians will get x and y velocity
+    // put angle in sin(angle) cos(angle) functions sin and cos are functions that produce a ratio
     projectile.draw();
 })
+
+animate();
