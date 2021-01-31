@@ -26,3 +26,7 @@ class Player{
         this. color = color;
     }
 }
+// now that I have my player class I can create a new instance of the player called new and specify Player 
+// and the constrcutor method give it some properties
+const player = new Player(100, 100, 30, "bue");
+console.log(player)
