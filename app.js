@@ -23,10 +23,18 @@ class Player{
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this. color = color;
+        this.color = color;
+    }
+    draw(){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        // ctx.fill() to draw the circle and tell player to call the draw function for it to draw on screne.
+        ctx.fill();
     }
 }
 // now that I have my player class I can create a new instance of the player called new and specify Player 
 // and the constrcutor method give it some properties
-const player = new Player(100, 100, 30, "bue");
-console.log(player)
+const player = new Player(100, 100, 30, "blue");
+console.log(player);
+player.draw();
