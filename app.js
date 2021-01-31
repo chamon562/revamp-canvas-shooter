@@ -83,6 +83,8 @@ let y = canvas.height / 2;
 // ********* Movement WITH WASD KEY **********
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
 // logging event to gret keycode W = 87 A = 65 S = 83 D = 68
+const player = new Player(x, y, 30, "blue");
+player.draw();
 function movement(event) {
     console.log(event);
     // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
@@ -173,7 +175,7 @@ addEventListener("click", (event) => {
     //     projectile.draw();
     //     projectile.update();
     // now get angle for x and y to create velocity
-    projectilesArr.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, "red", velocity))
+    projectilesArr.push(new Projectile(x, y, 5, "red", velocity))
 })
 
 animate();
