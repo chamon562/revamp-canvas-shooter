@@ -76,6 +76,20 @@ player.draw();
 
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
 // want to add an event listener on mousedown or click
-window.addEventListener("click", () =>{
-    console.log("your are clicking");
+// little strick found that you can get rid of window and just leave it as addEventListener because the window will already know to clean up code. 
+// want projectile to fire wherever my mouse is so I must get the x and y coordiante of it wherever i click to move that way. 
+// get through an event object. 
+addEventListener("click", (event) => {
+    // create a new projectile, draw it on the screen wherever clicked, and 
+    // then add velocity so projectile moves from center wherever click 
+    // the first argument for this function is an event object so pass that in
+    // this console.log(event) shows the mouse event when i click and gives all the x and y coordiantes
+    // also gives me the properties related to where my mouse was wherever I click on screen. clientX clientY
+    // so now I know my event.clientX and event.clientY as my arguments for my projectile.
+    console.log(event);
+    console.log("clientX:", event.clientX, "clientY:", event.clientY );
+    const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null);
+    // console.log("your are clicking");
+    // to draw the projectile on click get the projectile variable that stores its properies then .draw() function
+    projectile.draw();
 })
