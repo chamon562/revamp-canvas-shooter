@@ -77,14 +77,35 @@ class Projectile {
     }
 }
 
-// want to make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
+// **** ENEMY CLASS ****
+class Enemy {
+    constructor(x, y, radius, color, velocity) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+        this.velocity = velocity;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+    update() {
+        this.draw();
+        this.x = this.x + this.velocity.y;
+        this.y = this.y + this.velocity.x;
+    }
+}
+
+// spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
 let x = canvas.width / 2;
 let y = canvas.height / 2;
 // ********* Movement WITH WASD KEY **********
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
 // logging event to gret keycode W = 87 A = 65 S = 83 D = 68
 const player = new Player(x, y, 30, "blue");
-player.draw();
 function movement(event) {
     console.log(event);
     // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
@@ -125,12 +146,17 @@ function animate() {
     requestAnimationFrame(animate);
     // must clear canvas constantly so no streaks are left behind call ctx.clearRect();
     // clear the x = 0 clear the y = 0 clear the whole canvas by canvas.width, canvas.height
-    ctx.clearRect(0, 0, canvas.width, canvas.height );
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // to make sure player is there need to call player.draw() within aniation loop 
+    // because ctx.clearRect is constantly being called without a player being drawn 
+    // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
+    player.draw();
+    // movement();
     // forEach projectiles in this array call the projectiles update function
     projectilesArr.forEach((projectile) => {
         projectile.update();
     })
-    
+
     // console.log("calling animte function")
     // to move projectile from center x velocity to x coordinate and same for y
     // each frame I loop through will be adding on velocity
@@ -181,5 +207,6 @@ addEventListener("click", (event) => {
     // now get angle for x and y to create velocity
     projectilesArr.push(new Projectile(x, y, 5, "red", velocity))
 })
+
 
 animate();
