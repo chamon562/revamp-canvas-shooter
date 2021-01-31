@@ -117,9 +117,18 @@ function animate() {
 // want projectile to fire wherever my mouse is so I must get the x and y coordiante of it wherever i click to move that way. 
 // get through an event object. 
 addEventListener("click", (event) => {
-    // creating the angle with Math.atan2(event.clientY - canvas.width / 2) gives distance from center to our mouse
-    const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2);
-
+    // creating the angle with Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2) gives distance from center to our mouse
+    const angle = Math.atan2(event.clientX - canvas.width / 2, event.clientY - canvas.height / 2);
+    console.log(angle);
+    // creating velocity to get x's is Math.cos is for x adjacent axis and put in angle calculate, returning any negative 1 to 1
+    // cos and sin together will produce 2 different results that will have a ratio to start pushing projectile to wherever clicked
+    // take this velocity and replace it with the static velocity inside projetile class
+    const velocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    }
+    console.log(velocity.x)
+    console.log(velocity.y)
     // create a new projectile, draw it on the screen wherever clicked, and 
     // then add velocity so projectile moves from center wherever click 
     // the first argument for this function is an event object so pass that in
@@ -143,7 +152,7 @@ addEventListener("click", (event) => {
     //     projectile.draw();
     //     projectile.update();
     // now get angle for x and y to create velocity
-    projectilesArr.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, "red", {x: 1, y: 1}))
+    projectilesArr.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, "red", velocity))
 })
 
 animate();
