@@ -34,6 +34,7 @@ class Player {
     }
 }
 
+
 // ******** SHOOT PROJECTILES FROM MY PLAYER ********
 // what properties does a projectile have?
 // im thinking similar to a circle itll be a ball shooting out for now. 
@@ -77,15 +78,35 @@ class Projectile {
 }
 
 // want to make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
-const x = canvas.width / 2;
-const y = canvas.height / 2;
-// now that I have my player class I can create a new instance of the player called new and specify Player 
-// and the constrcutor method give it some properties
-const player = new Player(x, y, 30, "blue");
-// console.log(player);
-// this lets me see the circle on screen by calling player.draw();
-// the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
-player.draw();
+let x = canvas.width / 2;
+let y = canvas.height / 2;
+// ********* Movement WITH WASD KEY **********
+// made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
+// logging event to gret keycode W = 87 A = 65 S = 83 D = 68
+function movement(event) {
+    console.log(event);
+    // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
+    if (event.keyCode == 87) {
+        y -= 10;
+    }
+    if (event.keyCode == 65) {
+        x -= 10;
+    }
+    if (event.keyCode == 83) {
+        y += 10;
+    }
+    if (event.keyCode == 68) {
+        x += 10;
+    }
+    // now that I have my player class I can create a new instance of the player called new and specify Player 
+    // and the constrcutor method give it some properties
+    const player = new Player(x, y, 30, "blue");
+    // console.log(player);
+    // this lets me see the circle on screen by calling player.draw();
+    // the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
+    player.draw();
+}
+document.addEventListener("keydown", movement);
 
 // moved outside from eventListener to gain access and put inside animate function 
 // const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 });
