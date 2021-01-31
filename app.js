@@ -59,7 +59,18 @@ class Projectile {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         ctx.fillStyle = this.color;
-        ctx.fill()
+        ctx.fill();
+    }
+    // adding in update function to update classes property so can seperate what my class
+    // looks like compared to where im manipulating its properties on the screen 
+    // what to add velocity 
+    update() {
+        // for each frame for animation loop set x coordiante for each projectile
+        // this.x is equal to the current x coordinate this.x + this.velocity (the coordiantes veloctiy )
+        // this is where creating the velocity for x and y only issue is not yet pass through velocity to our projectile
+        // find new Projectile where made click event and change null to javascript objet x and y
+        this.x = this.x + this.velocity.y;
+        this.y = this.y + this.velocity.x;
     }
 }
 
@@ -74,12 +85,21 @@ const player = new Player(x, y, 30, "blue");
 // the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
 player.draw();
 
+// moved outside from eventListener to gain access and put inside animate function 
+const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 });
+
+
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
 // no animation yet intill there is an anmiation loop
 //this will be called over and over again to give the illusion of a moving object
-function animate(){
+function animate() {
     requestAnimationFrame(animate);
     console.log("calling animte function")
+    // to move projectile from center x velocity to x coordinate and same for y
+    // each frame I loop through will be adding on velocity
+    
+    projectile.draw();
+    projectile.update();
 }
 
 // want to add an event listener on mousedown or click
@@ -98,7 +118,8 @@ addEventListener("click", (event) => {
     // this shows projectile on click wherever on the screen
     // const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null); 
     // this starts the projectile from the center of the screen need to connect to player later 
-    const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', null);
+    // since projectile is set to const its considered scope and only accessible within this addEventListener call back
+    // const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', {x: 1, y: 1});
     // console.log("your are clicking");
     // to draw the projectile on click get the projectile variable that stores its properies then .draw() function
     // now projectile shows by just making a static dot when i click the sreen, next how can get it to move.
@@ -106,7 +127,8 @@ addEventListener("click", (event) => {
     // gotta get the angle, then put in atan2 function and is what produces the angle get x and y put in atan2
     // atan(x, y) = angle, atain()** , once got angle in radians will get x and y velocity
     // put angle in sin(angle) cos(angle) functions sin and cos are functions that produce a ratio
-    projectile.draw();
+    //     projectile.draw();
+    //     projectile.update();
 })
 
 animate();
