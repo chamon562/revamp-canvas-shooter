@@ -1,0 +1,10 @@
+/* removing the default margin:8px that comes with the canvas
+So I target the brody*/
+
+body{
+    margin: 0;
+}
+
+canvas {
+    border: 2px solid black;
+}
