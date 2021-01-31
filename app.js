@@ -118,7 +118,7 @@ function animate() {
 // get through an event object. 
 addEventListener("click", (event) => {
     // creating the angle with Math.atan2(event.clientY - canvas.width / 2) gives distance from center to our mouse
-    const angle = Math.atan2(event.clientY - canvas.width / 2)
+    const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2);
 
     // create a new projectile, draw it on the screen wherever clicked, and 
     // then add velocity so projectile moves from center wherever click 
