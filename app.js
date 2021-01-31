@@ -65,6 +65,8 @@ class Projectile {
     // looks like compared to where im manipulating its properties on the screen 
     // what to add velocity 
     update() {
+        // to draw that projectile combine draw function
+        this.draw();
         // for each frame for animation loop set x coordiante for each projectile
         // this.x is equal to the current x coordinate this.x + this.velocity (the coordiantes veloctiy )
         // this is where creating the velocity for x and y only issue is not yet pass through velocity to our projectile
@@ -86,7 +88,11 @@ const player = new Player(x, y, 30, "blue");
 player.draw();
 
 // moved outside from eventListener to gain access and put inside animate function 
-const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 });
+// const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 });
+// to get rendered on screen and move different directions need to create an array. a grouping of projectiles then
+// then draw them all out at the same time.
+// const projectilesArr = [projectile];
+const projectilesArr = [];
 
 
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
@@ -94,12 +100,16 @@ const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red',
 //this will be called over and over again to give the illusion of a moving object
 function animate() {
     requestAnimationFrame(animate);
-    console.log("calling animte function")
+    // forEach projectiles in this array call the projectiles update function
+    projectilesArr.forEach((projectile) => {
+        projectile.update();
+    })
+    // console.log("calling animte function")
     // to move projectile from center x velocity to x coordinate and same for y
     // each frame I loop through will be adding on velocity
-    
-    projectile.draw();
-    projectile.update();
+
+    // projectile.draw();
+    // projectile.update();
 }
 
 // want to add an event listener on mousedown or click
@@ -129,6 +139,8 @@ addEventListener("click", (event) => {
     // put angle in sin(angle) cos(angle) functions sin and cos are functions that produce a ratio
     //     projectile.draw();
     //     projectile.update();
+
+    projectilesArr.push(new Projectile(canvas.width / 2, canvas.height / 2, 5, "red", {x: 1, y: 1}))
 })
 
 animate();
