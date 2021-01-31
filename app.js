@@ -123,10 +123,14 @@ const projectilesArr = [];
 //this will be called over and over again to give the illusion of a moving object
 function animate() {
     requestAnimationFrame(animate);
+    // must clear canvas constantly so no streaks are left behind call ctx.clearRect();
+    // clear the x = 0 clear the y = 0 clear the whole canvas by canvas.width, canvas.height
+    ctx.clearRect(0, 0, canvas.width, canvas.height );
     // forEach projectiles in this array call the projectiles update function
     projectilesArr.forEach((projectile) => {
         projectile.update();
     })
+    
     // console.log("calling animte function")
     // to move projectile from center x velocity to x coordinate and same for y
     // each frame I loop through will be adding on velocity
