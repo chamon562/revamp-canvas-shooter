@@ -183,12 +183,13 @@ document.addEventListener("keydown", movement);
 const projectilesArr = [];
 
 
+let animationId;
 
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
 // no animation yet intill there is an anmiation loop
 //this will be called over and over again to give the illusion of a moving object
 function animate() {
-    requestAnimationFrame(animate);
+    animationId = requestAnimationFrame(animate);
     // must clear canvas constantly so no streaks are left behind call ctx.clearRect();
     // clear the x = 0 clear the y = 0 clear the whole canvas by canvas.width, canvas.height
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -206,6 +207,14 @@ function animate() {
     // which calls draw which then updates the individual enemies properties
     enemies.forEach((enemy) => {
         enemy.update()
+        const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+        if (distance - enemy.radius - player.radius < 1) {
+            console.log("player hit by enemy")
+            // end game 
+            // when player is hit pause game and everything is running off requestAnimationFrame so need to cancel
+            // using cancelAnimationFrame()
+            cancelAnimationFrame(animationId);
+        }
         // forEach projectileArr within in this array select that one projectile
         projectilesArr.forEach((projectile, index, projectilesArrIndex) => {
             // testing distance between projectile and enemy using Math.hypot() is pretty much the distance between 2 points. 
