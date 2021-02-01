@@ -109,13 +109,16 @@ function spawnEnemies() {
         const y = 100;
         const radius = 30;
         const color = "green"
+        // canvas.width /2 and canvas.height /2 is where player is
+        // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
+        const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
         const velocity = {
-            x: 1,
-            y: 1,
+            x: Math.cos(angle),
+            y: Math.sin(angle)
         }
         enemies.push(new Enemy(x, y, radius, color, velocity))
         console.log(enemies, "enemy spawn")
-    }, 1000)
+    }, 2000);
 }
 // creating enemies array 
 const enemies = [];
@@ -178,7 +181,8 @@ function animate() {
         projectile.update();
     })
     // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
-    enemies.forEach((enemy) =>{
+    // which calls draw which then updates the individual enemies properties
+    enemies.forEach((enemy) => {
         enemy.update()
     })
 
