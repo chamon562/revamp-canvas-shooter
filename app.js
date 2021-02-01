@@ -109,10 +109,27 @@ function spawnEnemies() {
     setInterval(() => {
         // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
         // Enemy class takes in x y color and velocity
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const radius = 30;
-        const color = "green"
+        // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
+        // const y = Math.random() * canvas.height;
+        // for enemies off the screen to left needs to be at 0 minus its radius
+        // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
+        // to get a random number of radius from 0 to 30 Math.random() * 30
+        // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
+        const radius = Math.random() * (50 - 10) + 10;
+        let x;
+        let y;
+        if (Math.random() < .5) {
+            x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+            y = Math.random() * canvas.height;
+        } else {
+            x = Math.random() * canvas.width;
+            y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+        }
+        // using turnerary to get one of 2 values randomly 
+        // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
+        // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+        // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+        const color = "purple"
         // canvas.width /2 and canvas.height /2 is where player is
         // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
         const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
@@ -132,7 +149,7 @@ let y = canvas.height / 2;
 // ********* Movement WITH WASD KEY **********
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
 // logging event to gret keycode W = 87 A = 65 S = 83 D = 68
-const player = new Player(x, y, 30, "blue");
+const player = new Player(x, y, 30, "#00FFFF");
 function movement(event) {
     console.log(event);
     // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
@@ -190,10 +207,13 @@ function animate() {
         enemy.update()
     })
 
+    // **** Hit Detection **** 
+    // needs to be in animate loop because for each frame need to check if projectile is touching enemy
+
     // console.log("calling animte function")
     // to move projectile from center x velocity to x coordinate and same for y
     // each frame I loop through will be adding on velocity
-
+    
     // projectile.draw();
     // projectile.update();
 }
