@@ -98,7 +98,27 @@ class Enemy {
         this.y = this.y + this.velocity.x;
     }
 }
-
+// new function to spawn Enemies
+// need to create something that groups multiple enemies together then
+// draw them all out at the same time.
+function spawnEnemies() {
+    setInterval(() => {
+        // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
+        // Enemy class takes in x y color and velocity
+        const x = 100;
+        const y = 100;
+        const radius = 30;
+        const color = "green"
+        const velocity = {
+            x: 1,
+            y: 1,
+        }
+        enemies.push(new Enemy(x, y, radius, color, velocity))
+        console.log(enemies, "enemy spawn")
+    }, 1000)
+}
+// creating enemies array 
+const enemies = [];
 // spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
 let x = canvas.width / 2;
 let y = canvas.height / 2;
@@ -139,6 +159,7 @@ document.addEventListener("keydown", movement);
 const projectilesArr = [];
 
 
+
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
 // no animation yet intill there is an anmiation loop
 //this will be called over and over again to give the illusion of a moving object
@@ -155,6 +176,10 @@ function animate() {
     // forEach projectiles in this array call the projectiles update function
     projectilesArr.forEach((projectile) => {
         projectile.update();
+    })
+    // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
+    enemies.forEach((enemy) =>{
+        enemy.update()
     })
 
     // console.log("calling animte function")
@@ -210,3 +235,4 @@ addEventListener("click", (event) => {
 
 
 animate();
+spawnEnemies();
