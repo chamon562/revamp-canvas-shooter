@@ -190,6 +190,7 @@ let animationId;
 //this will be called over and over again to give the illusion of a moving object
 function animate() {
     animationId = requestAnimationFrame(animate);
+    
     // must clear canvas constantly so no streaks are left behind call ctx.clearRect();
     // clear the x = 0 clear the y = 0 clear the whole canvas by canvas.width, canvas.height
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -199,9 +200,18 @@ function animate() {
     player.draw();
     // movement();
     // forEach projectiles in this array call the projectiles update function
-    projectilesArr.forEach((projectile) => {
+    projectilesArr.forEach((projectile, projectilesArrIndex) => {
         projectile.update();
 
+        // to stop compuation remove projectile once off screen from projectilesArr
+        if (projectile.x + projectile.radius < 0 ||
+            projectile.x - projectile.radius > canvas.width ||
+            projectile.y + projectile.radius < 0 ||
+            projectile.y - projectile.radius > canvas.height) {
+            setTimeout(() => {
+                projectilesArr.splice(projectilesArrIndex, 1)
+            }, 0)
+        }
     })
     // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
     // which calls draw which then updates the individual enemies properties
@@ -255,6 +265,7 @@ function animate() {
 // want projectile to fire wherever my mouse is so I must get the x and y coordiante of it wherever i click to move that way. 
 // get through an event object. 
 addEventListener("click", (event) => {
+    console.log(projectilesArr)
     // creating the angle with Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2) gives distance from center to our mouse
     const angle = Math.atan2(event.clientX - canvas.width / 2, event.clientY - canvas.height / 2);
     console.log(angle);
