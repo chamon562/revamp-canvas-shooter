@@ -106,40 +106,40 @@ class Enemy {
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
 function spawnEnemies() {
-    setInterval(() => {
-        // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
-        // Enemy class takes in x y color and velocity
-        // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
-        // const y = Math.random() * canvas.height;
-        // for enemies off the screen to left needs to be at 0 minus its radius
-        // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
-        // to get a random number of radius from 0 to 30 Math.random() * 30
-        // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
-        const radius = Math.random() * (50 - 10) + 10;
-        let x;
-        let y;
-        if (Math.random() < .5) {
-            x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-            y = Math.random() * canvas.height;
-        } else {
-            x = Math.random() * canvas.width;
-            y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-        }
-        // using turnerary to get one of 2 values randomly 
-        // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
-        // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-        // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-        const color = "purple"
-        // canvas.width /2 and canvas.height /2 is where player is
-        // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
-        const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
-        const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
-        }
-        enemies.push(new Enemy(x, y, radius, color, velocity))
-        console.log(enemies, "enemy spawn")
-    }, 2000);
+    // setInterval(() => {
+    // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
+    // Enemy class takes in x y color and velocity
+    // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
+    // const y = Math.random() * canvas.height;
+    // for enemies off the screen to left needs to be at 0 minus its radius
+    // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
+    // to get a random number of radius from 0 to 30 Math.random() * 30
+    // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
+    const radius = Math.random() * (50 - 10) + 10;
+    let x;
+    let y;
+    if (Math.random() < .5) {
+        x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+        y = Math.random() * canvas.height;
+    } else {
+        x = Math.random() * canvas.width;
+        y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+    }
+    // using turnerary to get one of 2 values randomly 
+    // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
+    // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+    // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+    const color = "purple"
+    // canvas.width /2 and canvas.height /2 is where player is
+    // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
+    const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
+    const velocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    }
+    enemies.push(new Enemy(x, y, radius, color, velocity))
+    console.log(enemies, "enemy spawn")
+    // }, 2000);
 }
 // creating enemies array 
 const enemies = [];
@@ -200,12 +200,31 @@ function animate() {
     // forEach projectiles in this array call the projectiles update function
     projectilesArr.forEach((projectile) => {
         projectile.update();
+
     })
     // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
     // which calls draw which then updates the individual enemies properties
     enemies.forEach((enemy) => {
         enemy.update()
-    })
+        // forEach projectileArr within in this array select that one projectile
+        projectilesArr.forEach((projectile, index, projectilesArrIndex) => {
+            // testing distance between projectile and enemy using Math.hypot() is pretty much the distance between 2 points. 
+            // arguments will be x and y distance projectile.x - enemy, projectile.y - enemy.y
+            const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+            // console.log(distance);
+            // if the distance minus enemy.radius is less than 1 make it disapear
+            // if objects touch
+            if(distance - enemy.radius - projectile.radius < 1){
+                console.log("Hit Detected")
+                // to move enemy and projectile from array use .pop to get it out the array. 
+                // so I have to select the array which is enemies and use splice to say where do i want to remove the enemy from.
+                // maybe grab or find its index? .splice out this enemies at this index and want to remove 1 enemy
+                enemies.splice(index, 1);
+                // do same .splice for projectile so it disapears upon hit detection
+                projectilesArr.splice(projectilesArrIndex, 1);
+            }
+        });
+    });
 
     // **** Hit Detection **** 
     // needs to be in animate loop because for each frame need to check if projectile is touching enemy
@@ -213,7 +232,7 @@ function animate() {
     // console.log("calling animte function")
     // to move projectile from center x velocity to x coordinate and same for y
     // each frame I loop through will be adding on velocity
-    
+
     // projectile.draw();
     // projectile.update();
 }
