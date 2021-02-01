@@ -1,5 +1,9 @@
 // console.log("app.js conected") app is connected to the html
 // first grab the canvas and set it to a variable
+// some power up for players 
+// defensive reflection shield that last for 5 seconds reflecting enemy projectile to bounce back
+
+
 const canvas = document.querySelector("canvas");
 // console.log(canvas);
 // resizing canvas to make it fit to screen.
@@ -105,8 +109,8 @@ function spawnEnemies() {
     setInterval(() => {
         // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
         // Enemy class takes in x y color and velocity
-        const x = 100;
-        const y = 100;
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
         const radius = 30;
         const color = "green"
         // canvas.width /2 and canvas.height /2 is where player is
