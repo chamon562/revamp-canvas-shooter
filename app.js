@@ -94,6 +94,7 @@ class Enemy {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         ctx.fillStyle = this.color;
+        ctx.strokeStyle = "white"
         ctx.fill();
     }
     update() {
@@ -115,7 +116,7 @@ function spawnEnemies() {
         // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
         // to get a random number of radius from 0 to 30 Math.random() * 30
         // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
-        const radius = Math.random() * (50 - 10) + 10;
+        const radius = Math.random() * (40 - 10) + 10;
         let x;
         let y;
         if (Math.random() < .5) {
@@ -129,7 +130,11 @@ function spawnEnemies() {
         // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
         // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
         // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-        const color = "purple"
+        // const color = "purple"
+        // trying hue saturation lightness, its value is from 0 to 360
+        // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
+        // using back ticks for computation is template literal
+        const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
         // canvas.width /2 and canvas.height /2 is where player is
         // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
         const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
@@ -149,7 +154,7 @@ let y = canvas.height / 2;
 // ********* Movement WITH WASD KEY **********
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
 // logging event to gret keycode W = 87 A = 65 S = 83 D = 68
-const player = new Player(x, y, 30, "#00FFFF");
+const player = new Player(x, y, 20, "tan");
 function movement(event) {
     console.log(event);
     // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
@@ -239,14 +244,28 @@ function animate() {
                 console.log("Hit Detected")
                 // setTimeout to stop circles from blinking each time its hit
                 // takes a callback function as the first argument, set time to 0
-                setTimeout(() => {
-                    // to move enemy and projectile from array use .pop to get it out the array. 
-                    // so I have to select the array which is enemies and use splice to say where do i want to remove the enemy from.
-                    // maybe grab or find its index? .splice out this enemies at this index and want to remove 1 enemy
-                    enemies.splice(index, 1);
-                    // do same .splice for projectile so it disapears upon hit detection
-                    projectilesArr.splice(projectilesArrIndex, 1);
-                }, 0)
+                // taking away hit points and reducing an enemies radius when hit conditional
+                // if enemy radius - 10 is greater than 10 then when hit by projectile to reduce its radius by 10 and if its pexels is less than 10 remove off screen because it got too small to hit before
+                if (enemy.radius - 10 > 10) {
+                    // smooth animation when circle looses its size by getting hit. use animation library 
+                    // gasp green sock animation platform the greensock.com/gasp/ the go to animation platform for interpolating between values
+                    // meaning transitioning from one value to another and adding in easing to make it look like a smooth transition
+                    // if enemy.radius -= 10 is left on one shot itll reduce the circle gradually by 10
+                    enemy.radius -= 10
+                    setTimeout(() => {
+                        projectilesArr.splice(projectilesArrIndex, 1);
+                    })
+                } else {
+                    setTimeout(() => {
+                        // to move enemy and projectile from array use .pop to get it out the array. 
+                        // so I have to select the array which is enemies and use splice to say where do i want to remove the enemy from.
+                        // maybe grab or find its index? .splice out this enemies at this index and want to remove 1 enemy
+                        enemies.splice(index, 1);
+                        // do same .splice for projectile so it disapears upon hit detection
+                        projectilesArr.splice(projectilesArrIndex, 1);
+                    }, 0)
+                }
+
             }
         });
     });
@@ -275,8 +294,8 @@ addEventListener("click", (event) => {
     // cos and sin together will produce 2 different results that will have a ratio to start pushing projectile to wherever clicked
     // take this velocity and replace it with the static velocity inside projetile class
     const velocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
+        x: Math.cos(angle) * 4,
+        y: Math.sin(angle) * 4
     }
     console.log(velocity.x)
     console.log(velocity.y)
@@ -303,7 +322,7 @@ addEventListener("click", (event) => {
     //     projectile.draw();
     //     projectile.update();
     // now get angle for x and y to create velocity
-    projectilesArr.push(new Projectile(x, y, 5, "red", velocity))
+    projectilesArr.push(new Projectile(x, y, 5, "white", velocity))
 })
 
 
