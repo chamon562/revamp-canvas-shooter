@@ -190,10 +190,12 @@ let animationId;
 //this will be called over and over again to give the illusion of a moving object
 function animate() {
     animationId = requestAnimationFrame(animate);
-    
+    // console.log(ctx)
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     // must clear canvas constantly so no streaks are left behind call ctx.clearRect();
     // clear the x = 0 clear the y = 0 clear the whole canvas by canvas.width, canvas.height
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
     // to make sure player is there need to call player.draw() within aniation loop 
     // because ctx.clearRect is constantly being called without a player being drawn 
     // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
