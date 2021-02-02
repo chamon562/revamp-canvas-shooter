@@ -1,4 +1,5 @@
 // console.log("app.js conected") app is connected to the html
+// console.log(gsap);
 // first grab the canvas and set it to a variable
 // some power up for players 
 // defensive reflection shield that last for 5 seconds reflecting enemy projectile to bounce back
