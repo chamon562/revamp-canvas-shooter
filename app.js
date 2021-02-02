@@ -104,6 +104,33 @@ class Enemy {
         this.y = this.y + this.velocity.x;
     }
 }
+// **** PARTICLE CLASS for impact to explode ****
+class Particle {
+    constructor(x, y, radius, color, velocity) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+        this.velocity = velocity;
+        // to make particles fade out on impact add alpha value
+        // dont need to pass as an argument its value will alaways start as 1
+        this.alpha = 1;
+    }
+    draw() {
+        // calling ctx.save() gets inside the state of being able to call a global canvas function
+        ctx.save()
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = "white"
+        ctx.fill();
+    }
+    update() {
+        this.draw();
+        this.x = this.x + this.velocity.y;
+        this.y = this.y + this.velocity.x;
+    }
+}
 // new function to spawn Enemies
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
@@ -147,15 +174,13 @@ function spawnEnemies() {
         console.log(enemies, "enemy spawn")
     }, 2000);
 }
-// creating enemies array 
-const enemies = [];
+
 // spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
 let x = canvas.width / 2;
 let y = canvas.height / 2;
 // ********* Movement WITH WASD KEY **********
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
 // logging event to gret keycode W = 87 A = 65 S = 83 D = 68
-const player = new Player(x, y, 20, "tan");
 function movement(event) {
     console.log(event);
     // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
@@ -186,8 +211,11 @@ document.addEventListener("keydown", movement);
 // to get rendered on screen and move different directions need to create an array. a grouping of projectiles then
 // then draw them all out at the same time.
 // const projectilesArr = [projectile];
+const player = new Player(x, y, 20, "tan");
 const projectilesArr = [];
-
+// creating enemies array 
+const enemies = [];
+const particles = [];
 
 let animationId;
 
@@ -195,6 +223,7 @@ let animationId;
 // no animation yet intill there is an anmiation loop
 //this will be called over and over again to give the illusion of a moving object
 function animate() {
+    // to render anything on the screen need to loop through it. 
     animationId = requestAnimationFrame(animate);
     // console.log(ctx)
     ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
@@ -206,6 +235,10 @@ function animate() {
     // because ctx.clearRect is constantly being called without a player being drawn 
     // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
     player.draw();
+    // rendering partcles explosion on impact of projectile to enemy
+    particles.forEach((particle) => {
+        particle.update();
+    });
     // movement();
     // forEach projectiles in this array call the projectiles update function
     projectilesArr.forEach((projectile, projectilesArrIndex) => {
@@ -243,6 +276,15 @@ function animate() {
             // if objects touch
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
+                // using for loop for particle explosion
+                for (let i = 0; i < 8; i++) {
+                    particles.push(
+                        new Particle(projectile.x, projectile.y, 3, enemy.color, {
+                            x: Math.random() * - 0.5,
+                            y: Math.random() * - 0.5
+                        })
+                    )
+                }
                 // setTimeout to stop circles from blinking each time its hit
                 // takes a callback function as the first argument, set time to 0
                 // taking away hit points and reducing an enemies radius when hit conditional
@@ -252,7 +294,10 @@ function animate() {
                     // gasp green sock animation platform the greensock.com/gasp/ the go to animation platform for interpolating between values
                     // meaning transitioning from one value to another and adding in easing to make it look like a smooth transition
                     // if enemy.radius -= 10 is left on one shot itll reduce the circle gradually by 10
-                    enemy.radius -= 10
+                    // enemy.radius -= 10
+                    gsap.to(enemy, {
+                        radius: enemy.radius - 10
+                    });
                     setTimeout(() => {
                         projectilesArr.splice(projectilesArrIndex, 1);
                     })
