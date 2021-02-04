@@ -62,15 +62,15 @@ class Projectile {
         this.velocity = velocity;
     }
     draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-        }
-        // adding in update function to update classes property so can seperate what my class
-        // looks like compared to where im manipulating its properties on the screen 
-        // what to add velocity 
-    update() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+    // adding in update function to update classes property so can seperate what my class
+    // looks like compared to where im manipulating its properties on the screen 
+    // what to add velocity 
+    update() { 
         // to draw that projectile combine draw function
         this.draw();
         // for each frame for animation loop set x coordiante for each projectile
@@ -106,7 +106,7 @@ class Enemy {
 }
 // **** PARTICLE CLASS for impact to explode ****
 // create a friction when the particle explode slowing down on hit
-const friction = 0.99;
+const friction = .98;
 class Particle {
     constructor(x, y, radius, color, velocity) {
         this.x = x;
@@ -260,28 +260,28 @@ function animate() {
     // movement();
     // forEach projectiles in this array call the projectiles update function
     projectilesArr.forEach((projectile, projectilesArrIndex) => {
-            projectile.update();
+        projectile.update();
 
-            // to stop compuation remove projectile once off screen from projectilesArr
-            if (projectile.x + projectile.radius < 0 ||
-                projectile.x - projectile.radius > canvas.width ||
-                projectile.y + projectile.radius < 0 ||
-                projectile.y - projectile.radius > canvas.height) {
-                setTimeout(() => {
-                    projectilesArr.splice(projectilesArrIndex, 1)
-                }, 0)
-            }
-        })
-        // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
-        // which calls draw which then updates the individual enemies properties
+        // to stop compuation remove projectile once off screen from projectilesArr
+        if (projectile.x + projectile.radius < 0 ||
+            projectile.x - projectile.radius > canvas.width ||
+            projectile.y + projectile.radius < 0 ||
+            projectile.y - projectile.radius > canvas.height) {
+            setTimeout(() => {
+                projectilesArr.splice(projectilesArrIndex, 1)
+            }, 0)
+        }
+    })
+    // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
+    // which calls draw which then updates the individual enemies properties
     enemies.forEach((enemy) => {
         enemy.update()
         const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y)
         if (distance - enemy.radius - player.radius < 1) {
             console.log("player hit by enemy")
-                // end game 
-                // when player is hit pause game and everything is running off requestAnimationFrame so need to cancel
-                // using cancelAnimationFrame()
+            // end game 
+            // when player is hit pause game and everything is running off requestAnimationFrame so need to cancel
+            // using cancelAnimationFrame()
             cancelAnimationFrame(animationId);
         }
         // forEach projectileArr within in this array select that one projectile
@@ -289,13 +289,13 @@ function animate() {
             // testing distance between projectile and enemy using Math.hypot() is pretty much the distance between 2 points. 
             // arguments will be x and y distance projectile.x - enemy, projectile.y - enemy.y
             const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
-                // console.log(distance);
-                // create explosion 
-                // if objects touch
+            // console.log(distance);
+            // create explosion 
+            // if objects touch
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
-                    // using for loop for particle explosion
-                    // from i < 8 to i < enemy.radius * 2
+                // using for loop for particle explosion
+                // from i < 8 to i < enemy.radius * 2
                 for (let i = 0; i < enemy.radius * 2; i++) {
                     particles.push(
                         new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {
@@ -360,7 +360,7 @@ function animate() {
 // get through an event object. 
 addEventListener("click", (event) => {
     console.log(projectilesArr)
-        // creating the angle with Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2) gives distance from center to our mouse
+    // creating the angle with Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2) gives distance from center to our mouse
     const angle = Math.atan2(event.clientX - canvas.width / 2, event.clientY - canvas.height / 2);
     console.log(angle);
     // creating velocity to get x's is Math.cos is for x adjacent axis and put in angle calculate, returning any negative 1 to 1
@@ -372,12 +372,12 @@ addEventListener("click", (event) => {
     }
     console.log(velocity.x)
     console.log(velocity.y)
-        // create a new projectile, draw it on the screen wherever clicked, and 
-        // then add velocity so projectile moves from center wherever click 
-        // the first argument for this function is an event object so pass that in
-        // this console.log(event) shows the mouse event when i click and gives all the x and y coordiantes
-        // also gives me the properties related to where my mouse was wherever I click on screen. clientX clientY
-        // so now I know my event.clientX and event.clientY as my arguments for my projectile.
+    // create a new projectile, draw it on the screen wherever clicked, and 
+    // then add velocity so projectile moves from center wherever click 
+    // the first argument for this function is an event object so pass that in
+    // this console.log(event) shows the mouse event when i click and gives all the x and y coordiantes
+    // also gives me the properties related to where my mouse was wherever I click on screen. clientX clientY
+    // so now I know my event.clientX and event.clientY as my arguments for my projectile.
     console.log(event);
     console.log("clientX:", event.clientX, "clientY:", event.clientY);
     // this shows projectile on click wherever on the screen
