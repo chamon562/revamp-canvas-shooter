@@ -15,7 +15,8 @@ const ctx = canvas.getContext("2d");
 
 let scoreNum = document.getElementById("score-num")
 // console.log(scoreNum)
-// let startGameBtn = document.getElementById("startGameBtn")
+let startGameBtn = document.getElementById("startGameBtn")
+let modalElem = document.getElementById("modal")
 console.log(startGameBtn);
 // to create a player consist of a circle in middle and once something hits it game over
 // payer needs to interact with the rest of elements on screen. 
@@ -416,4 +417,6 @@ addEventListener("click", (event) => {
 startGameBtn.addEventListener("click", () => {
     animate();
     spawnEnemies();
+    // target modal variable modalELem grab the style and then display = to none to remove it
+    modalElem.style.display = "none"
 })
