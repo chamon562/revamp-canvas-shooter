@@ -14,8 +14,9 @@ canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
 
 let scoreNum = document.getElementById("score-num")
-console.log(scoreNum)
-
+// console.log(scoreNum)
+// let startGameBtn = document.getElementById("startGameBtn")
+console.log(startGameBtn);
 // to create a player consist of a circle in middle and once something hits it game over
 // payer needs to interact with the rest of elements on screen. 
 // look into creating a class for Player class Player capitol P to say its a class
@@ -73,7 +74,7 @@ class Projectile {
     // adding in update function to update classes property so can seperate what my class
     // looks like compared to where im manipulating its properties on the screen 
     // what to add velocity 
-    update() { 
+    update() {
         // to draw that projectile combine draw function
         this.draw();
         // for each frame for animation loop set x coordiante for each projectile
@@ -299,7 +300,7 @@ function animate() {
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
                 // update score in order to increase score need a let variable so we can alter and add a value to
-                
+
 
                 // using for loop for particle explosion
                 // from i < 8 to i < enemy.radius * 2
@@ -311,7 +312,7 @@ function animate() {
                             // multiple by a math.random() * 8
                             x: (Math.random() - 0.5) * (Math.random() * 8),
                             y: (Math.random() - 0.5) * (Math.random() * 8)
-                            
+
                         })
                     )
                 }
@@ -350,7 +351,7 @@ function animate() {
                         projectilesArr.splice(projectilesArrIndex, 1);
                     }, 0)
                 }
-            
+
 
             }
         });
@@ -411,6 +412,8 @@ addEventListener("click", (event) => {
     projectilesArr.push(new Projectile(x, y, 5, "white", velocity))
 })
 
-
-animate();
-spawnEnemies();
+// for modal button when the modal button is clicked to restart the game
+startGameBtn.addEventListener("click", () => {
+    animate();
+    spawnEnemies();
+})
