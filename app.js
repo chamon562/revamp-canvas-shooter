@@ -62,14 +62,14 @@ class Projectile {
         this.velocity = velocity;
     }
     draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-    }
-    // adding in update function to update classes property so can seperate what my class
-    // looks like compared to where im manipulating its properties on the screen 
-    // what to add velocity 
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+        // adding in update function to update classes property so can seperate what my class
+        // looks like compared to where im manipulating its properties on the screen 
+        // what to add velocity 
     update() {
         // to draw that projectile combine draw function
         this.draw();
@@ -117,62 +117,68 @@ class Particle {
         this.alpha = 1;
     }
     draw() {
-        // calling ctx.save() gets inside the state of being able to call a global canvas function
+        // calling ctx.save() gets inside the state of being able
+        //  to call a global canvas function effecting only code inside draw function
         ctx.save()
+        ctx.globalAlpha = this.alpha;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         ctx.fillStyle = this.color;
         ctx.strokeStyle = "white"
         ctx.fill();
+        // ctx.restore() finishes off the statement and calling code in between from ctx.save()
+        ctx.restore();
     }
     update() {
         this.draw();
         this.x = this.x + this.velocity.y;
         this.y = this.y + this.velocity.x;
+        // this will make the particles gradually fade
+        this.alpha -= 0.01;
     }
 }
 // new function to spawn Enemies
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
 function spawnEnemies() {
-    setInterval(() => {
-        // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
-        // Enemy class takes in x y color and velocity
-        // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
-        // const y = Math.random() * canvas.height;
-        // for enemies off the screen to left needs to be at 0 minus its radius
-        // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
-        // to get a random number of radius from 0 to 30 Math.random() * 30
-        // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
-        const radius = Math.random() * (40 - 10) + 10;
-        let x;
-        let y;
-        if (Math.random() < .5) {
-            x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-            y = Math.random() * canvas.height;
-        } else {
-            x = Math.random() * canvas.width;
-            y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-        }
-        // using turnerary to get one of 2 values randomly 
-        // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
-        // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-        // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-        // const color = "purple"
-        // trying hue saturation lightness, its value is from 0 to 360
-        // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
-        // using back ticks for computation is template literal
-        const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
-        // canvas.width /2 and canvas.height /2 is where player is
-        // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
-        const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
-        const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
-        }
-        enemies.push(new Enemy(x, y, radius, color, velocity))
-        console.log(enemies, "enemy spawn")
-    }, 2000);
+    // setInterval(() => {
+    // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
+    // Enemy class takes in x y color and velocity
+    // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
+    // const y = Math.random() * canvas.height;
+    // for enemies off the screen to left needs to be at 0 minus its radius
+    // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
+    // to get a random number of radius from 0 to 30 Math.random() * 30
+    // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
+    const radius = Math.random() * (40 - 10) + 10;
+    let x;
+    let y;
+    if (Math.random() < .5) {
+        x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+        y = Math.random() * canvas.height;
+    } else {
+        x = Math.random() * canvas.width;
+        y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+    }
+    // using turnerary to get one of 2 values randomly 
+    // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
+    // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+    // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+    // const color = "purple"
+    // trying hue saturation lightness, its value is from 0 to 360
+    // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
+    // using back ticks for computation is template literal
+    const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
+    // canvas.width /2 and canvas.height /2 is where player is
+    // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
+    const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
+    const velocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    }
+    enemies.push(new Enemy(x, y, radius, color, velocity))
+    console.log(enemies, "enemy spawn")
+        // }, 2000);
 }
 
 // spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
@@ -236,34 +242,39 @@ function animate() {
     // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
     player.draw();
     // rendering partcles explosion on impact of projectile to enemy
-    particles.forEach((particle) => {
-        particle.update();
+    particles.forEach((particle, partIndex) => {
+        if (particle.alpha <= 0) {
+            // to remove the particles from the screen target particles array use .splice and specify the index and how many
+            particles.splice(partIndex, 1);
+        } else {
+            particle.update();
+        }
     });
     // movement();
     // forEach projectiles in this array call the projectiles update function
     projectilesArr.forEach((projectile, projectilesArrIndex) => {
-        projectile.update();
+            projectile.update();
 
-        // to stop compuation remove projectile once off screen from projectilesArr
-        if (projectile.x + projectile.radius < 0 ||
-            projectile.x - projectile.radius > canvas.width ||
-            projectile.y + projectile.radius < 0 ||
-            projectile.y - projectile.radius > canvas.height) {
-            setTimeout(() => {
-                projectilesArr.splice(projectilesArrIndex, 1)
-            }, 0)
-        }
-    })
-    // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
-    // which calls draw which then updates the individual enemies properties
+            // to stop compuation remove projectile once off screen from projectilesArr
+            if (projectile.x + projectile.radius < 0 ||
+                projectile.x - projectile.radius > canvas.width ||
+                projectile.y + projectile.radius < 0 ||
+                projectile.y - projectile.radius > canvas.height) {
+                setTimeout(() => {
+                    projectilesArr.splice(projectilesArrIndex, 1)
+                }, 0)
+            }
+        })
+        // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
+        // which calls draw which then updates the individual enemies properties
     enemies.forEach((enemy) => {
         enemy.update()
         const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y)
         if (distance - enemy.radius - player.radius < 1) {
             console.log("player hit by enemy")
-            // end game 
-            // when player is hit pause game and everything is running off requestAnimationFrame so need to cancel
-            // using cancelAnimationFrame()
+                // end game 
+                // when player is hit pause game and everything is running off requestAnimationFrame so need to cancel
+                // using cancelAnimationFrame()
             cancelAnimationFrame(animationId);
         }
         // forEach projectileArr within in this array select that one projectile
@@ -271,17 +282,18 @@ function animate() {
             // testing distance between projectile and enemy using Math.hypot() is pretty much the distance between 2 points. 
             // arguments will be x and y distance projectile.x - enemy, projectile.y - enemy.y
             const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
-            // console.log(distance);
-            // s
-            // if objects touch
+                // console.log(distance);
+                // create explosion 
+                // if objects touch
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
-                // using for loop for particle explosion
+                    // using for loop for particle explosion
                 for (let i = 0; i < 8; i++) {
                     particles.push(
-                        new Particle(projectile.x, projectile.y, 3, enemy.color, {
-                            x: Math.random() * - 0.5,
-                            y: Math.random() * - 0.5
+                        new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {
+                            // new Particle(projectile.x, projectile.y, 3, enemy.color, 
+                            x: Math.random() * -0.5,
+                            y: Math.random() * -0.5
                         })
                     )
                 }
@@ -296,7 +308,12 @@ function animate() {
                     // if enemy.radius -= 10 is left on one shot itll reduce the circle gradually by 10
                     // enemy.radius -= 10
                     gsap.to(enemy, {
-                        radius: enemy.radius - 10
+                        radius: enemy.radius - 10,
+                        // distance: Math.hypot(projectile.x + enemy.x, projectile.y + enemy.y) ,
+                        // fix enemies to bounce back opoisite of projectile direction when shot
+                        // x: 
+                        // y:
+
                     });
                     setTimeout(() => {
                         projectilesArr.splice(projectilesArrIndex, 1);
@@ -333,7 +350,7 @@ function animate() {
 // get through an event object. 
 addEventListener("click", (event) => {
     console.log(projectilesArr)
-    // creating the angle with Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2) gives distance from center to our mouse
+        // creating the angle with Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2) gives distance from center to our mouse
     const angle = Math.atan2(event.clientX - canvas.width / 2, event.clientY - canvas.height / 2);
     console.log(angle);
     // creating velocity to get x's is Math.cos is for x adjacent axis and put in angle calculate, returning any negative 1 to 1
@@ -345,12 +362,12 @@ addEventListener("click", (event) => {
     }
     console.log(velocity.x)
     console.log(velocity.y)
-    // create a new projectile, draw it on the screen wherever clicked, and 
-    // then add velocity so projectile moves from center wherever click 
-    // the first argument for this function is an event object so pass that in
-    // this console.log(event) shows the mouse event when i click and gives all the x and y coordiantes
-    // also gives me the properties related to where my mouse was wherever I click on screen. clientX clientY
-    // so now I know my event.clientX and event.clientY as my arguments for my projectile.
+        // create a new projectile, draw it on the screen wherever clicked, and 
+        // then add velocity so projectile moves from center wherever click 
+        // the first argument for this function is an event object so pass that in
+        // this console.log(event) shows the mouse event when i click and gives all the x and y coordiantes
+        // also gives me the properties related to where my mouse was wherever I click on screen. clientX clientY
+        // so now I know my event.clientX and event.clientY as my arguments for my projectile.
     console.log(event);
     console.log("clientX:", event.clientX, "clientY:", event.clientY);
     // this shows projectile on click wherever on the screen
