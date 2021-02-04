@@ -13,6 +13,9 @@ canvas.height = window.innerHeight;
 // grab the context so I can use its api to draw and do everything
 const ctx = canvas.getContext("2d");
 
+let scoreNum = document.getElementById("score-num")
+console.log(scoreNum)
+
 // to create a player consist of a circle in middle and once something hits it game over
 // payer needs to interact with the rest of elements on screen. 
 // look into creating a class for Player class Player capitol P to say its a class
@@ -294,6 +297,7 @@ function animate() {
             // if objects touch
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
+
                 // using for loop for particle explosion
                 // from i < 8 to i < enemy.radius * 2
                 for (let i = 0; i < enemy.radius * 2; i++) {
@@ -304,6 +308,7 @@ function animate() {
                             // multiple by a math.random() * 8
                             x: (Math.random() - 0.5) * (Math.random() * 8),
                             y: (Math.random() - 0.5) * (Math.random() * 8)
+                            
                         })
                     )
                 }
@@ -338,6 +343,7 @@ function animate() {
                         projectilesArr.splice(projectilesArrIndex, 1);
                     }, 0)
                 }
+            
 
             }
         });
