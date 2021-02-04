@@ -105,6 +105,8 @@ class Enemy {
     }
 }
 // **** PARTICLE CLASS for impact to explode ****
+// create a friction when the particle explode slowing down on hit
+const friction = 0.99;
 class Particle {
     constructor(x, y, radius, color, velocity) {
         this.x = x;
@@ -131,6 +133,11 @@ class Particle {
     }
     update() {
         this.draw();
+        // updating velocity on hit to slow down in the update function
+        // velocity.x to be equal to itself times friction
+        // shrinking velocity over time by multiplying x by itself times friction
+        this.velocity.x *= friction
+        this.velocity.y *= friction
         this.x = this.x + this.velocity.y;
         this.y = this.y + this.velocity.x;
         // this will make the particles gradually fade
@@ -141,44 +148,44 @@ class Particle {
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
 function spawnEnemies() {
-    // setInterval(() => {
-    // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
-    // Enemy class takes in x y color and velocity
-    // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
-    // const y = Math.random() * canvas.height;
-    // for enemies off the screen to left needs to be at 0 minus its radius
-    // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
-    // to get a random number of radius from 0 to 30 Math.random() * 30
-    // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
-    const radius = Math.random() * (40 - 10) + 10;
-    let x;
-    let y;
-    if (Math.random() < .5) {
-        x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-        y = Math.random() * canvas.height;
-    } else {
-        x = Math.random() * canvas.width;
-        y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-    }
-    // using turnerary to get one of 2 values randomly 
-    // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
-    // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-    // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-    // const color = "purple"
-    // trying hue saturation lightness, its value is from 0 to 360
-    // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
-    // using back ticks for computation is template literal
-    const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
-    // canvas.width /2 and canvas.height /2 is where player is
-    // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
-    const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
-    const velocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
-    }
-    enemies.push(new Enemy(x, y, radius, color, velocity))
-    console.log(enemies, "enemy spawn")
-        // }, 2000);
+    setInterval(() => {
+        // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
+        // Enemy class takes in x y color and velocity
+        // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
+        // const y = Math.random() * canvas.height;
+        // for enemies off the screen to left needs to be at 0 minus its radius
+        // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
+        // to get a random number of radius from 0 to 30 Math.random() * 30
+        // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
+        const radius = Math.random() * (40 - 10) + 10;
+        let x;
+        let y;
+        if (Math.random() < .5) {
+            x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+            y = Math.random() * canvas.height;
+        } else {
+            x = Math.random() * canvas.width;
+            y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+        }
+        // using turnerary to get one of 2 values randomly 
+        // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
+        // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+        // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+        // const color = "purple"
+        // trying hue saturation lightness, its value is from 0 to 360
+        // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
+        // using back ticks for computation is template literal
+        const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
+        // canvas.width /2 and canvas.height /2 is where player is
+        // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
+        const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
+        const velocity = {
+            x: Math.cos(angle),
+            y: Math.sin(angle)
+        }
+        enemies.push(new Enemy(x, y, radius, color, velocity))
+        console.log(enemies, "enemy spawn")
+    }, 2000);
 }
 
 // spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
@@ -288,12 +295,15 @@ function animate() {
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
                     // using for loop for particle explosion
+                    // from i < 8 to i < enemy.radius * 2
                 for (let i = 0; i < enemy.radius * 2; i++) {
                     particles.push(
                         new Particle(projectile.x, projectile.y, Math.random() * 2, enemy.color, {
                             // new Particle(projectile.x, projectile.y, 3, enemy.color, 
-                            x: Math.random() * -0.5,
-                            y: Math.random() * -0.5
+                            // giving the explosion a much higher velocity for impact to be more dramatic
+                            // multiple by a math.random() * 8
+                            x: (Math.random() - 0.5) * (Math.random() * 8),
+                            y: (Math.random() - 0.5) * (Math.random() * 8)
                         })
                     )
                 }
