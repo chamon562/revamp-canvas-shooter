@@ -17,6 +17,7 @@ let scoreNum = document.getElementById("score-num")
 // console.log(scoreNum)
 let startGameBtn = document.getElementById("startGameBtn")
 let modalElem = document.getElementById("modal")
+let endScore = document.getElementById("endScore")
 console.log(startGameBtn);
 // to create a player consist of a circle in middle and once something hits it game over
 // payer needs to interact with the rest of elements on screen. 
@@ -289,6 +290,9 @@ function animate() {
             // when player is hit pause game and everything is running off requestAnimationFrame so need to cancel
             // using cancelAnimationFrame()
             cancelAnimationFrame(animationId);
+            modalElem.style.display = "flex";
+            endScore.innerText = score
+
         }
         // forEach projectileArr within in this array select that one projectile
         projectilesArr.forEach((projectile, index, projectilesArrIndex) => {
