@@ -234,7 +234,8 @@ const enemies = [];
 const particles = [];
 
 let animationId;
-
+// initialize score to be 0
+let score = 0;
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
 // no animation yet intill there is an anmiation loop
 //this will be called over and over again to give the illusion of a moving object
@@ -297,6 +298,8 @@ function animate() {
             // if objects touch
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
+                // update score in order to increase score need a let variable so we can alter and add a value to
+
 
                 // using for loop for particle explosion
                 // from i < 8 to i < enemy.radius * 2
