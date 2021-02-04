@@ -299,7 +299,7 @@ function animate() {
             if (distance - enemy.radius - projectile.radius < 1) {
                 console.log("Hit Detected")
                 // update score in order to increase score need a let variable so we can alter and add a value to
-
+                
 
                 // using for loop for particle explosion
                 // from i < 8 to i < enemy.radius * 2
@@ -325,6 +325,8 @@ function animate() {
                     // meaning transitioning from one value to another and adding in easing to make it look like a smooth transition
                     // if enemy.radius -= 10 is left on one shot itll reduce the circle gradually by 10
                     // enemy.radius -= 10
+                    scoreNum.innerText = score += 55;
+
                     gsap.to(enemy, {
                         radius: enemy.radius - 10,
                         // distance: Math.hypot(projectile.x + enemy.x, projectile.y + enemy.y) ,
@@ -337,6 +339,8 @@ function animate() {
                         projectilesArr.splice(projectilesArrIndex, 1);
                     })
                 } else {
+                    scoreNum.innerText = score += 100;
+
                     setTimeout(() => {
                         // to move enemy and projectile from array use .pop to get it out the array. 
                         // so I have to select the array which is enemies and use splice to say where do i want to remove the enemy from.
