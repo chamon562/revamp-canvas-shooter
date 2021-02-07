@@ -19,6 +19,17 @@ let startGameBtn = document.getElementById("startGameBtn")
 let modalElem = document.getElementById("modal")
 let endScore = document.getElementById("endScore")
 console.log(startGameBtn);
+let speed = 2;
+let w = false;
+let a = false;
+let s = false;
+let d = false;
+// let img = new Image();
+// img.onload = function () {
+//     ctx.drawImage(img, 50, 200)
+// };
+// img.src = "images/back-cat-head.png"
+
 // to create a player consist of a circle in middle and once something hits it game over
 // payer needs to interact with the rest of elements on screen. 
 // look into creating a class for Player class Player capitol P to say its a class
@@ -30,11 +41,13 @@ class Player {
     // each time i create a new player will give player all these individual properties to differentiate it 
     // from other players I might create
     // whenever I create new players I add new proprerties on to that new instance of the player 
-    constructor(x, y, radius, color) {
+    constructor(x, y, radius, color, speed, img) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.color = color;
+        this.speed = speed;
+        this.image = img
     }
     draw() {
         ctx.beginPath();
@@ -198,47 +211,90 @@ function spawnEnemies() {
 let x = canvas.width / 2;
 let y = canvas.height / 2;
 // ********* Movement WITH WASD KEY **********
+function inputs() {
+    if (w) {
+        y = y - speed;
+    }
+    if (a) {
+        x = x - speed;
+    }
+    if (s) {
+        y = y + speed;
+    }
+    if (d) {
+        x = x + speed;
+    }
+}
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
 // logging event to gret keycode W = 87 A = 65 S = 83 D = 68
-function movement(event) {
+
+function keyDownMove(event) {
     console.log(event);
     // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
     if (event.keyCode == 87) {
-        y -= 10;
+        w = true;
     }
     if (event.keyCode == 65) {
-        x -= 10;
+        a = true;
     }
     if (event.keyCode == 83) {
-        y += 10;
+        s = true;
     }
     if (event.keyCode == 68) {
-        x += 10;
+        d = true;
+    }
+}
+// now that I have my player class I can create a new instance of the player called new and specify Player 
+function keyUpMove(event) {
+    console.log(event);
+    if (event.keyCode == 87) {
+        w = false;
+    }
+    if (event.keyCode == 65) {
+        a = false;
+    }
+    if (event.keyCode == 83) {
+        s = false;
+    }
+    if (event.keyCode == 68) {
+        d = false;
     }
     // now that I have my player class I can create a new instance of the player called new and specify Player 
     // and the constrcutor method give it some properties
-    const player = new Player(x, y, 30, "blue");
+    // const player = new Player(x, y, 30, "blue", speed);
     // console.log(player);
     // this lets me see the circle on screen by calling player.draw();
     // the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
-    player.draw();
+    // player.draw();
 }
-document.addEventListener("keydown", movement);
-
+document.addEventListener("keydown", keyDownMove);
+document.addEventListener("keyup", keyUpMove);
 // moved outside from eventListener to gain access and put inside animate function 
 // const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 });
 // to get rendered on screen and move different directions need to create an array. a grouping of projectiles then
 // then draw them all out at the same time.
 // const projectilesArr = [projectile];
-const player = new Player(x, y, 20, "tan");
-const projectilesArr = [];
+let player = new Player(x, y, 20, "tan", speed);
+console.log(player)
+let projectilesArr = [];
 // creating enemies array 
-const enemies = [];
-const particles = [];
+let enemies = [];
+let particles = [];
 
 let animationId;
 // initialize score to be 0
 let score = 0;
+// create init function to reset everything for the game
+function init() {
+    player = new Player(x, y, 20, "tan", speed);
+    projectilesArr = [];
+    enemies = [];
+    particles = [];
+    // score is zero but hidden behind the scenes in javascript and cant be seen yet intill set inside the html
+    score = 0;
+    scoreNum.innerText = score;
+    endScore.innerText = score;
+}
 // **** TO ACTIVATE CODE WHEN CLICKING SCREEN ****
 // no animation yet intill there is an anmiation loop
 //this will be called over and over again to give the illusion of a moving object
@@ -247,6 +303,7 @@ function animate() {
     animationId = requestAnimationFrame(animate);
     // console.log(ctx)
     ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    // this refreshes and stops the elements from causing streaks.
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     // must clear canvas constantly so no streaks are left behind call ctx.clearRect();
     // clear the x = 0 clear the y = 0 clear the whole canvas by canvas.width, canvas.height
@@ -254,7 +311,9 @@ function animate() {
     // to make sure player is there need to call player.draw() within aniation loop 
     // because ctx.clearRect is constantly being called without a player being drawn 
     // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
+    inputs();
     player.draw();
+    // img
     // rendering partcles explosion on impact of projectile to enemy
     particles.forEach((particle, partIndex) => {
         if (particle.alpha <= 0) {
@@ -294,6 +353,7 @@ function animate() {
             endScore.innerText = score
 
         }
+        // movement();
         // forEach projectileArr within in this array select that one projectile
         projectilesArr.forEach((projectile, index, projectilesArrIndex) => {
             // testing distance between projectile and enemy using Math.hypot() is pretty much the distance between 2 points. 
@@ -337,8 +397,8 @@ function animate() {
                         radius: enemy.radius - 10,
                         // distance: Math.hypot(projectile.x + enemy.x, projectile.y + enemy.y) ,
                         // fix enemies to bounce back opoisite of projectile direction when shot
-                        // x: 
-                        // y:
+                        x: enemy.x - 20,
+                        y: enemy.y - 20
 
                     });
                     setTimeout(() => {
@@ -356,8 +416,6 @@ function animate() {
                         projectilesArr.splice(projectilesArrIndex, 1);
                     }, 0)
                 }
-
-
             }
         });
     });
@@ -419,8 +477,11 @@ addEventListener("click", (event) => {
 
 // for modal button when the modal button is clicked to restart the game
 startGameBtn.addEventListener("click", () => {
+    init();
     animate();
     spawnEnemies();
     // target modal variable modalELem grab the style and then display = to none to remove it
     modalElem.style.display = "none"
 })
+
+// wherever initializing values put that init function and call that init function on start and startGameBtn click to reset all
