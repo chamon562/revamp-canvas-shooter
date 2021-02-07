@@ -19,7 +19,7 @@ let startGameBtn = document.getElementById("startGameBtn")
 let modalElem = document.getElementById("modal")
 let endScore = document.getElementById("endScore")
 console.log(startGameBtn);
-let speed = 3;
+let speed = 2;
 let w = false;
 let a = false;
 let s = false;
@@ -275,8 +275,7 @@ document.addEventListener("keyup", keyUpMove);
 // then draw them all out at the same time.
 // const projectilesArr = [projectile];
 let player = new Player(x, y, 20, "tan", speed);
-
-console.log("player.x:", player.x)
+console.log(player)
 let projectilesArr = [];
 // creating enemies array 
 let enemies = [];
@@ -483,7 +482,7 @@ startGameBtn.addEventListener("click", () => {
     spawnEnemies();
     // target modal variable modalELem grab the style and then display = to none to remove it
     modalElem.style.display = "none"
+    
 })
 
 // wherever initializing values put that init function and call that init function on start and startGameBtn click to reset all
-animate();
