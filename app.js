@@ -19,7 +19,7 @@ let startGameBtn = document.getElementById("startGameBtn")
 let modalElem = document.getElementById("modal")
 let endScore = document.getElementById("endScore")
 console.log(startGameBtn);
-let speed = 2;
+let speed = 3;
 let w = false;
 let a = false;
 let s = false;
@@ -211,18 +211,18 @@ function spawnEnemies() {
 let x = canvas.width / 2;
 let y = canvas.height / 2;
 // ********* Movement WITH WASD KEY **********
-function inputs() {
+function playerMove() {
     if (w) {
-        y = y - speed;
+        player.y = y -= speed;
     }
     if (a) {
-        x = x - speed;
+        player.x = x -= speed;
     }
     if (s) {
-        y = y + speed;
+        player.y = y += speed;
     }
     if (d) {
-        x = x + speed;
+        player.x = x += speed;
     }
 }
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
@@ -275,7 +275,8 @@ document.addEventListener("keyup", keyUpMove);
 // then draw them all out at the same time.
 // const projectilesArr = [projectile];
 let player = new Player(x, y, 20, "tan", speed);
-console.log(player)
+
+console.log("player.x:", player.x)
 let projectilesArr = [];
 // creating enemies array 
 let enemies = [];
@@ -311,7 +312,7 @@ function animate() {
     // to make sure player is there need to call player.draw() within aniation loop 
     // because ctx.clearRect is constantly being called without a player being drawn 
     // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
-    inputs();
+    playerMove();
     player.draw();
     // img
     // rendering partcles explosion on impact of projectile to enemy
@@ -485,3 +486,4 @@ startGameBtn.addEventListener("click", () => {
 })
 
 // wherever initializing values put that init function and call that init function on start and startGameBtn click to reset all
+animate();
