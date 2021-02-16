@@ -204,8 +204,13 @@ function spawnEnemies() {
         }
         enemies.push(new Enemy(x, y, radius, color, velocity))
         console.log(enemies, "enemy spawn")
-    }, 2000);
+    }, 1000);
 }
+
+
+const playerSprite = new Image();
+playerSprite.src = "plane.png"
+
 
 // spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
 let x = canvas.width / 2;
@@ -302,7 +307,7 @@ function animate() {
     // to render anything on the screen need to loop through it. 
     animationId = requestAnimationFrame(animate);
     // console.log(ctx)
-    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.fillStyle = "rgba(0, 0, 0, .1)";
     // this refreshes and stops the elements from causing streaks.
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     // must clear canvas constantly so no streaks are left behind call ctx.clearRect();
@@ -340,7 +345,7 @@ function animate() {
     })
     // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
     // which calls draw which then updates the individual enemies properties
-    enemies.forEach((enemy) => {
+    enemies.forEach((enemy,index,) => {
         enemy.update()
         const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y)
         if (distance - enemy.radius - player.radius < 1) {
@@ -352,10 +357,12 @@ function animate() {
             modalElem.style.display = "flex";
             endScore.innerText = score
 
+
         }
+
         // movement();
         // forEach projectileArr within in this array select that one projectile
-        projectilesArr.forEach((projectile, index, projectilesArrIndex) => {
+        projectilesArr.forEach((projectile,  projectilesArrIndex) => {
             // testing distance between projectile and enemy using Math.hypot() is pretty much the distance between 2 points. 
             // arguments will be x and y distance projectile.x - enemy, projectile.y - enemy.y
             const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
@@ -403,7 +410,7 @@ function animate() {
                     });
                     setTimeout(() => {
                         projectilesArr.splice(projectilesArrIndex, 1);
-                    })
+                    }, 0)
                 } else {
                     scoreNum.innerText = score += 100;
 
@@ -482,7 +489,7 @@ startGameBtn.addEventListener("click", () => {
     spawnEnemies();
     // target modal variable modalELem grab the style and then display = to none to remove it
     modalElem.style.display = "none"
-    
+
 })
 
 // wherever initializing values put that init function and call that init function on start and startGameBtn click to reset all
