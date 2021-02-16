@@ -210,8 +210,11 @@ function spawnEnemies() {
 
 const playerSprite = new Image();
 playerSprite.src = "plane.png"
+// function to draw sprite with arguments.
+function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
+    ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
 
-
+}
 // spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
 let x = canvas.width / 2;
 let y = canvas.height / 2;
