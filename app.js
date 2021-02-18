@@ -476,15 +476,21 @@ document.addEventListener("keydown", (e) => {
     }
 });
 // movement for arrows key
-document.addEventListener("keydown", (e) =>{
-     if(e.keyCode === 38){
+document.addEventListener("keydown", ({ keyCode }) => {
+    // using event objects, but only using one property of the object which is keyCode
+    // using object destructering by using curly bracket inside parenthesis instead of (e) use ({keyCode})
+    // can destructer the object to only get the exact property inside argument ({keyCode})
+    if (keyCode === 38) {
+        console.log("arrow Up")
+    } else if (keyCode === 37) {
+        console.log("arrow Left")
 
-    } else if(e.keyCode === 37){
+    } else if (keyCode === 40) {
+        console.log("arrow Down")
 
-    } else if(e.keyCode === 40){
+    } else if (keyCode === 39) {
+        console.log("arrow Right")
 
-    } else if(e.keyCode === 39){
-        
     }
 })
 // now that I have my player class I can create a new instance of the player called new and specify Player 
