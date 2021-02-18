@@ -211,72 +211,14 @@ function spawnEnemies() {
 const playerSprite = new Image();
 playerSprite.src = "plane.png"
 // function to draw sprite with arguments.
-function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
+function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH) {
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
 
 }
 // spawn player mid screen by make sure the x coordiante for my player will be set senter so taking canvas and divide it by 2 to get half
 let x = canvas.width / 2;
 let y = canvas.height / 2;
-// ********* Movement WITH WASD KEY **********
-function playerMove() {
-    if (w) {
-        player.y = y -= speed;
-    }
-    if (a) {
-        player.x = x -= speed;
-    }
-    if (s) {
-        player.y = y += speed;
-    }
-    if (d) {
-        player.x = x += speed;
-    }
-}
-// made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
-// logging event to gret keycode W = 87 A = 65 S = 83 D = 68
 
-function keyDownMove(event) {
-    console.log(event);
-    // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
-    if (event.keyCode == 87) {
-        w = true;
-    }
-    if (event.keyCode == 65) {
-        a = true;
-    }
-    if (event.keyCode == 83) {
-        s = true;
-    }
-    if (event.keyCode == 68) {
-        d = true;
-    }
-}
-// now that I have my player class I can create a new instance of the player called new and specify Player 
-function keyUpMove(event) {
-    console.log(event);
-    if (event.keyCode == 87) {
-        w = false;
-    }
-    if (event.keyCode == 65) {
-        a = false;
-    }
-    if (event.keyCode == 83) {
-        s = false;
-    }
-    if (event.keyCode == 68) {
-        d = false;
-    }
-    // now that I have my player class I can create a new instance of the player called new and specify Player 
-    // and the constrcutor method give it some properties
-    // const player = new Player(x, y, 30, "blue", speed);
-    // console.log(player);
-    // this lets me see the circle on screen by calling player.draw();
-    // the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
-    // player.draw();
-}
-document.addEventListener("keydown", keyDownMove);
-document.addEventListener("keyup", keyUpMove);
 // moved outside from eventListener to gain access and put inside animate function 
 // const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 });
 // to get rendered on screen and move different directions need to create an array. a grouping of projectiles then
@@ -348,7 +290,7 @@ function animate() {
     })
     // within animate function call enemies.forEach enemy within this enemies array call enemy.update function
     // which calls draw which then updates the individual enemies properties
-    enemies.forEach((enemy,index,) => {
+    enemies.forEach((enemy, index,) => {
         enemy.update()
         const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y)
         if (distance - enemy.radius - player.radius < 1) {
@@ -365,7 +307,7 @@ function animate() {
 
         // movement();
         // forEach projectileArr within in this array select that one projectile
-        projectilesArr.forEach((projectile,  projectilesArrIndex) => {
+        projectilesArr.forEach((projectile, projectilesArrIndex) => {
             // testing distance between projectile and enemy using Math.hypot() is pretty much the distance between 2 points. 
             // arguments will be x and y distance projectile.x - enemy, projectile.y - enemy.y
             const distance = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
@@ -495,4 +437,79 @@ startGameBtn.addEventListener("click", () => {
 
 })
 
+// ********* Movement WITH WASD KEY **********
+function playerMove() {
+    if (w) {
+        player.y = y -= speed;
+    }
+    if (a) {
+        player.x = x -= speed;
+    }
+    if (s) {
+        player.y = y += speed;
+    }
+    if (d) {
+        player.x = x += speed;
+    }
+}
+// made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
+// logging event to gret keycode W = 87 A = 65 S = 83 D = 68
+
+document.addEventListener("keydown", (e) => {
+    console.log(event);
+    // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
+    if (e.keyCode === 87) {
+        w = true;
+        console.log("up")
+    } else if (event.keyCode == 65) {
+        a = true;
+        console.log("left")
+
+    } else if (event.keyCode == 83) {
+        s = true;
+        console.log("down")
+
+    } else if (event.keyCode == 68) {
+        d = true;
+        console.log("right")
+
+    }
+});
+// movement for arrows key
+document.addEventListener("keydown", (e) =>{
+     if(e.keyCode === 38){
+
+    } else if(e.keyCode === 37){
+
+    } else if(e.keyCode === 40){
+
+    } else if(e.keyCode === 39){
+        
+    }
+})
+// now that I have my player class I can create a new instance of the player called new and specify Player 
+function keyUpMove(event) {
+    console.log(event);
+    if (event.keyCode == 87) {
+        w = false;
+    }
+    if (event.keyCode == 65) {
+        a = false;
+    }
+    if (event.keyCode == 83) {
+        s = false;
+    }
+    if (event.keyCode == 68) {
+        d = false;
+    }
+    // now that I have my player class I can create a new instance of the player called new and specify Player 
+    // and the constrcutor method give it some properties
+    // const player = new Player(x, y, 30, "blue", speed);
+    // console.log(player);
+    // this lets me see the circle on screen by calling player.draw();
+    // the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
+    // player.draw();
+}
+document.addEventListener("keyup", keyUpMove);
 // wherever initializing values put that init function and call that init function on start and startGameBtn click to reset all
+
