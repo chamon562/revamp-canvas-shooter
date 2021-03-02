@@ -41,13 +41,17 @@ class Player {
     // each time i create a new player will give player all these individual properties to differentiate it 
     // from other players I might create
     // whenever I create new players I add new proprerties on to that new instance of the player 
-    constructor(x, y, radius, color, speed, img) {
+    constructor(x, y, radius, color, velocity) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.color = color;
-        this.speed = speed;
-        this.image = img
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
+        // add property called this.friction
+        this.friction = .99;
     }
     draw() {
         ctx.beginPath();
@@ -55,6 +59,26 @@ class Player {
         ctx.fillStyle = this.color;
         // ctx.fill() to draw the circle and tell player to call the draw function for it to draw on screne.
         ctx.fill();
+    }
+    update() {
+        this.draw();
+        // to create a physics slow down for player to slow down over time friction.
+        this.velocity.x *= this.friction
+        this.velocity.y *= this.friction
+        this.x = this.x + this.velocity.x;
+        this.y = this.y + this.velocity.y
+
+        // conditionals to stop player from going past screen
+        if (this.x - this.radius + this.velocity.x > 0 && this.x + this.radius + this.velocity.x < canvas.width) {
+            this.x = this.x + this.velocity.x;
+        } else {
+            this.velocity.x = 0;
+        }
+        if (this.y - this.radius + this.velocity.y > 0 && this.y + this.radius + this.velocity.y < canvas.height) {
+            this.y = this.y + this.velocity.y;
+        } else {
+            this.velocity.y = 0;
+        }
     }
 }
 
@@ -119,8 +143,22 @@ class Enemy {
     }
     update() {
         this.draw();
-        this.x = this.x + this.velocity.y;
-        this.y = this.y + this.velocity.x;
+
+
+        // this is for linear travel
+        // this.x = this.x + this.velocity.y;
+        // this.y = this.y + this.velocity.x;
+        // how to get one enemy to start tracking player
+        // have to get angle produced between one enemy and player
+        // using atan2 to get that angle
+        // Math.atan2() takes in 2 arguments and the x and y are the distances between enemy and player just on the x axis
+        // in order to get the arguments for .atan2() can take players y coordinate minus this.y because this.y references one enemy y cooridinate
+        const angle = Math.atan2(player.y - this.y, player.x - this.x )
+        // console.log(angle)
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
     }
 }
 // **** PARTICLE CLASS for impact to explode ****
@@ -167,7 +205,7 @@ class Particle {
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
 function spawnEnemies() {
-    setInterval(() => {
+    // setInterval(() => {
         // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
         // Enemy class takes in x y color and velocity
         // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
@@ -204,7 +242,7 @@ function spawnEnemies() {
         }
         enemies.push(new Enemy(x, y, radius, color, velocity))
         console.log(enemies, "enemy spawn")
-    }, 1000);
+    // }, 1000);
 }
 
 
@@ -224,7 +262,7 @@ let y = canvas.height / 2;
 // to get rendered on screen and move different directions need to create an array. a grouping of projectiles then
 // then draw them all out at the same time.
 // const projectilesArr = [projectile];
-let player = new Player(x, y, 20, "tan", speed);
+let player = new Player(x, y, 20, "tan", this.velocity);
 console.log(player)
 let projectilesArr = [];
 // creating enemies array 
@@ -236,7 +274,7 @@ let animationId;
 let score = 0;
 // create init function to reset everything for the game
 function init() {
-    player = new Player(x, y, 20, "tan", speed);
+    player = new Player(x, y, 20, "tan", this.velocity);
     projectilesArr = [];
     enemies = [];
     particles = [];
@@ -262,8 +300,7 @@ function animate() {
     // because ctx.clearRect is constantly being called without a player being drawn 
     // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
     playerMove();
-    player.draw();
-    // img
+    player.update();
     // rendering partcles explosion on impact of projectile to enemy
     particles.forEach((particle, partIndex) => {
         if (particle.alpha <= 0) {
@@ -440,37 +477,37 @@ startGameBtn.addEventListener("click", () => {
 // ********* Movement WITH WASD KEY **********
 function playerMove() {
     if (w) {
-        player.y = y -= speed;
+        player.y = y -= velocity;
     }
     if (a) {
-        player.x = x -= speed;
+        player.x = x -= velocity;
     }
     if (s) {
-        player.y = y += speed;
+        player.y = y += velocity;
     }
     if (d) {
-        player.x = x += speed;
+        player.x = x += velocity;
     }
 }
 // made function movement and passed in event but shows logs nothing intil I give it an event to listen for which is keydown
 // logging event to gret keycode W = 87 A = 65 S = 83 D = 68
 
-document.addEventListener("keydown", (e) => {
+document.addEventListener("keydown", ({ keyCode }) => {
     console.log(event);
     // once got keycode make if logic for event.keycCode and give it x or y += how ever many px I want it to move
-    if (e.keyCode === 87) {
-        w = true;
+    if (keyCode === 87) {
+        player.velocity.y -= 1
         console.log("up")
-    } else if (event.keyCode == 65) {
-        a = true;
+    } else if (keyCode === 65) {
+        player.velocity.x -= 1
         console.log("left")
 
-    } else if (event.keyCode == 83) {
-        s = true;
+    } else if (keyCode === 83) {
+        player.velocity.y += 1
         console.log("down")
 
-    } else if (event.keyCode == 68) {
-        d = true;
+    } else if (keyCode === 68) {
+        player.velocity.x += 1
         console.log("right")
 
     }
@@ -481,41 +518,95 @@ document.addEventListener("keydown", ({ keyCode }) => {
     // using object destructering by using curly bracket inside parenthesis instead of (e) use ({keyCode})
     // can destructer the object to only get the exact property inside argument ({keyCode})
     if (keyCode === 38) {
+        player.velocity.y -= 1
+
         console.log("arrow Up")
     } else if (keyCode === 37) {
+        player.velocity.x -= 1
+
         console.log("arrow Left")
 
     } else if (keyCode === 40) {
+        player.velocity.y += 1
+
         console.log("arrow Down")
 
     } else if (keyCode === 39) {
+        player.velocity.x += 1
+
         console.log("arrow Right")
 
     }
 })
-// now that I have my player class I can create a new instance of the player called new and specify Player 
-function keyUpMove(event) {
-    console.log(event);
-    if (event.keyCode == 87) {
-        w = false;
-    }
-    if (event.keyCode == 65) {
-        a = false;
-    }
-    if (event.keyCode == 83) {
-        s = false;
-    }
-    if (event.keyCode == 68) {
-        d = false;
-    }
+
+// switch code for movement
+switch ({ keyCode }) {
+    case 87:
+        player.velocity.y -= 1
+
+        console.log("up")
+        break
+    case 65:
+        player.velocity.x -= 1
+
+        console.log("left")
+        break
+    case 83:
+        player.velocity.y += 1
+
+        console.log("down")
+        break
+    case 68:
+        console.log("right")
+        player.velocity.x += 1
+
+        break
+}
+switch ({ keyCode }) {
+    case 37:
+        player.velocity.y -= 1
+
+        console.log("up")
+        break
+    case 40:
+        player.velocity.x -= 1
+
+        console.log("left")
+        break
+    case 39:
+        player.velocity.y += 1
+
+        console.log("down")
+        break
+    case 38:
+        console.log("right")
+        player.velocity.x += 1
+
+        break
+}
+// now that I have my player class I can create a new instance of the player called new and specify Player
+// function keyUpMove(event) {
+//     console.log(event);
+//     if (event.keyCode == 87) {
+//         w = false;
+//     }
+//     if (event.keyCode == 65) {
+//         a = false;
+//     }
+//     if (event.keyCode == 83) {
+//         s = false;
+//     }
+//     if (event.keyCode == 68) {
+//         d = false;
+//     }
     // now that I have my player class I can create a new instance of the player called new and specify Player 
     // and the constrcutor method give it some properties
-    // const player = new Player(x, y, 30, "blue", speed);
+    // const player = new Player(x, y, 30, "blue", velocity);
     // console.log(player);
     // this lets me see the circle on screen by calling player.draw();
     // the blue inside new Player shoots up to the class player color argument and is inside this.color = color;
     // player.draw();
-}
-document.addEventListener("keyup", keyUpMove);
+// }
+// document.addEventListener("keyup", keyUpMove);
 // wherever initializing values put that init function and call that init function on start and startGameBtn click to reset all
 
