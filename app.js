@@ -133,6 +133,13 @@ class Enemy {
         this.radius = radius;
         this.color = color;
         this.velocity = velocity;
+        // intitial type of enemy 
+        this.type = "linear"
+        // making it a chance that one of the enemies will be tracking enemy
+        // if true give the 25% chance to make the enemy homing
+        if(Math.random() < 0.25){
+            this.type = "homing"
+        }
     }
     draw() {
         ctx.beginPath();
