@@ -211,7 +211,7 @@ class Particle {
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
 function spawnEnemies() {
-    // setInterval(() => {
+    setInterval(() => {
     // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
     // Enemy class takes in x y color and velocity
     // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
@@ -248,7 +248,7 @@ function spawnEnemies() {
     }
     enemies.push(new Enemy(x, y, radius, color, velocity))
     console.log(enemies, "enemy spawn")
-    // }, 1000);
+    }, 1000);
 }
 
 
@@ -433,7 +433,7 @@ function animate() {
 addEventListener("click", (event) => {
     console.log(projectilesArr)
     // creating the angle with Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2) gives distance from center to our mouse
-    const angle = Math.atan2(event.clientX - canvas.width / 2, event.clientY - canvas.height / 2);
+    const angle = Math.atan2(event.clientX - player.x, event.clientY - player.y);
     console.log(angle);
     // creating velocity to get x's is Math.cos is for x adjacent axis and put in angle calculate, returning any negative 1 to 1
     // cos and sin together will produce 2 different results that will have a ratio to start pushing projectile to wherever clicked
@@ -467,7 +467,7 @@ addEventListener("click", (event) => {
     //     projectile.draw();
     //     projectile.update();
     // now get angle for x and y to create velocity
-    projectilesArr.push(new Projectile(x, y, 5, "white", velocity))
+    projectilesArr.push(new Projectile(player.x, player.y, 5, "white", velocity))
 })
 
 // for modal button when the modal button is clicked to restart the game
