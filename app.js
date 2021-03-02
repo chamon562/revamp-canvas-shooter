@@ -153,12 +153,18 @@ class Enemy {
         // using atan2 to get that angle
         // Math.atan2() takes in 2 arguments and the x and y are the distances between enemy and player just on the x axis
         // in order to get the arguments for .atan2() can take players y coordinate minus this.y because this.y references one enemy y cooridinate
-        const angle = Math.atan2(player.y - this.y, player.x - this.x )
-        // console.log(angle)
+        const angle = Math.atan2(player.x - this.x, player.y - this.x)
+        // the console log produces the angle enemies movement when the player moves
+        console.log(angle)
         this.velocity = {
-            x: 0,
-            y: 0
+            // how to determine what x and y are for enemy velocity
+            // in order to get x velocity for enemy, take angle and put it inside a Math.cos(angle) function
+            x: Math.cos(angle),
+            // enemy y velocity is determine by using Math.sin(angle) this is basically cos() best friend
+            y: Math.sin(angle)
         }
+        this.x = this.x + this.velocity.y;
+        this.y = this.y + this.velocity.x;
     }
 }
 // **** PARTICLE CLASS for impact to explode ****
@@ -206,42 +212,42 @@ class Particle {
 // draw them all out at the same time.
 function spawnEnemies() {
     // setInterval(() => {
-        // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
-        // Enemy class takes in x y color and velocity
-        // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
-        // const y = Math.random() * canvas.height;
-        // for enemies off the screen to left needs to be at 0 minus its radius
-        // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
-        // to get a random number of radius from 0 to 30 Math.random() * 30
-        // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
-        const radius = Math.random() * (40 - 10) + 10;
-        let x;
-        let y;
-        if (Math.random() < .5) {
-            x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-            y = Math.random() * canvas.height;
-        } else {
-            x = Math.random() * canvas.width;
-            y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-        }
-        // using turnerary to get one of 2 values randomly 
-        // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
-        // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-        // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-        // const color = "purple"
-        // trying hue saturation lightness, its value is from 0 to 360
-        // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
-        // using back ticks for computation is template literal
-        const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
-        // canvas.width /2 and canvas.height /2 is where player is
-        // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
-        const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
-        const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
-        }
-        enemies.push(new Enemy(x, y, radius, color, velocity))
-        console.log(enemies, "enemy spawn")
+    // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
+    // Enemy class takes in x y color and velocity
+    // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
+    // const y = Math.random() * canvas.height;
+    // for enemies off the screen to left needs to be at 0 minus its radius
+    // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
+    // to get a random number of radius from 0 to 30 Math.random() * 30
+    // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
+    const radius = Math.random() * (40 - 10) + 10;
+    let x;
+    let y;
+    if (Math.random() < .5) {
+        x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+        y = Math.random() * canvas.height;
+    } else {
+        x = Math.random() * canvas.width;
+        y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+    }
+    // using turnerary to get one of 2 values randomly 
+    // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
+    // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+    // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+    // const color = "purple"
+    // trying hue saturation lightness, its value is from 0 to 360
+    // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
+    // using back ticks for computation is template literal
+    const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
+    // canvas.width /2 and canvas.height /2 is where player is
+    // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
+    const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
+    const velocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    }
+    enemies.push(new Enemy(x, y, radius, color, velocity))
+    console.log(enemies, "enemy spawn")
     // }, 1000);
 }
 
