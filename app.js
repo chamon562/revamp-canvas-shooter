@@ -133,13 +133,28 @@ class Enemy {
         this.radius = radius;
         this.color = color;
         this.velocity = velocity;
+        this.type = "spinning";
         // intitial type of enemy 
-        this.type = "linear"
+        // this.type = "linear"
+        // adding new property for enemey
+        this.center = {
+            // the center of our enemy will always be this.x and this.y
+            // so need to assign those this.x and this.y to these 2 properties inside this.center
+            // x: x,
+            x,
+            // since assigning x to another x dont need this colon x:x can just be x
+            // y: y
+            y
+        }
+        // have the center here
+        // now how do I make it move linearly while making the enemy orbit around the center
+        // that will happen in the update function
+        console.log("this.center: " , this.center)
         // making it a chance that one of the enemies will be tracking enemy
         // if true give the 25% chance to make the enemy homing
-        if(Math.random() < 0.25){
-            this.type = "homing"
-        }
+        //     if (Math.random() < 0.25) {
+        //         this.type = "homing"
+        //     }
     }
     draw() {
         ctx.beginPath();
@@ -151,31 +166,36 @@ class Enemy {
     update() {
         this.draw();
 
-        if ( this.type === "linear" ){
-                this.x = this.x + this.velocity.y;
-        this.y = this.y + this.velocity.x;
-        } else if (this.type === "homing"){
-
-        // how to get one enemy to start tracking player
-        // have to get angle produced between one enemy and player
-        // using atan2 to get that angle
-        // Math.atan2() takes in 2 arguments and the x and y are the distances between enemy and player just on the x axis
-        // in order to get the arguments for .atan2() can take players y coordinate minus this.y because this.y references one enemy y cooridinate
-        const angle = Math.atan2(player.x - this.x, player.y - this.y)
-        // this is for linear travel
-        // this.x = this.x + this.velocity.y;
-        // this.y = this.y + this.velocity.x;
-        // the console log produces the angle enemies movement when the player moves
-        console.log(angle)
-        this.velocity = {
-            // how to determine what x and y are for enemy velocity
-            // in order to get x velocity for enemy, take angle and put it inside a Math.cos(angle) function
-            x: Math.cos(angle),
-            // enemy y velocity is determine by using Math.sin(angle) this is basically cos() best friend
-            y: Math.sin(angle)
-        }
-        this.x = this.x + this.velocity.y;
-        this.y = this.y + this.velocity.x;
+        if (this.type === "linear") {
+            this.x = this.x + this.velocity.y;
+            this.y = this.y + this.velocity.x;
+        } else if (this.type === "homing") {
+            // how to get one enemy to start tracking player
+            // have to get angle produced between one enemy and player
+            // using atan2 to get that angle
+            // Math.atan2() takes in 2 arguments and the x and y are the distances between enemy and player just on the x axis
+            // in order to get the arguments for .atan2() can take players y coordinate minus this.y because this.y references one enemy y cooridinate
+            const angle = Math.atan2(player.x - this.x, player.y - this.y)
+            // this is for linear travel
+            // this.x = this.x + this.velocity.y;
+            // this.y = this.y + this.velocity.x;
+            // the console log produces the angle enemies movement when the player moves
+            console.log(angle)
+            this.velocity = {
+                // how to determine what x and y are for enemy velocity
+                // in order to get x velocity for enemy, take angle and put it inside a Math.cos(angle) function
+                x: Math.cos(angle),
+                // enemy y velocity is determine by using Math.sin(angle) this is basically cos() best friend
+                y: Math.sin(angle)
+            }
+            this.x = this.x + this.velocity.y;
+            this.y = this.y + this.velocity.x;
+        } else if (this.type === "spinning") {
+            // copying linear movement code to start and fix later for spinning
+            // in order to create a spinning enemy need to create some sort of ring for enemey orbit around
+            // for this to be possible need to add a center to our enemy
+            this.x = this.x + this.velocity.y;
+            this.y = this.y + this.velocity.x;
         }
 
     }
