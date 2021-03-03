@@ -133,9 +133,9 @@ class Enemy {
         this.radius = radius;
         this.color = color;
         this.velocity = velocity;
-        this.type = "spinning";
+        // this.type = "spinning";
         // intitial type of enemy 
-        // this.type = "linear"
+        this.type = "linear"
         // adding new property for enemey
         this.center = {
             // the center of our enemy will always be this.x and this.y
@@ -146,15 +146,21 @@ class Enemy {
             // y: y
             y
         }
+        // Adding on a property called radians
+        // over time for each frame that enemy exist and moves across the screen
+        this.radians = 0;
         // have the center here
         // now how do I make it move linearly while making the enemy orbit around the center
-        // that will happen in the update function
-        console.log("this.center: " , this.center)
+        // that will happen in the update function in the linear code
+        console.log("this.center: ", this.center)
         // making it a chance that one of the enemies will be tracking enemy
-        // if true give the 25% chance to make the enemy homing
-        //     if (Math.random() < 0.25) {
-        //         this.type = "homing"
-        //     }
+        // if true give the 25 % chance to make the enemy homing
+        if (Math.random() < 0.25) {
+            this.type = "homing";
+            if (Math.random() < 0.5) {
+                this.type = "spinning"
+            }
+        }
     }
     draw() {
         ctx.beginPath();
@@ -191,11 +197,35 @@ class Enemy {
             this.x = this.x + this.velocity.y;
             this.y = this.y + this.velocity.x;
         } else if (this.type === "spinning") {
+
+            this.radians += 0.05;
             // copying linear movement code to start and fix later for spinning
             // in order to create a spinning enemy need to create some sort of ring for enemey orbit around
             // for this to be possible need to add a center to our enemy
-            this.x = this.x + this.velocity.y;
-            this.y = this.y + this.velocity.x;
+            // since this is linear going to change to this.center and making the center move linearly
+            // and add the center of x on to itself and whenever adding something to itself can change to this.centerx += this.velocity.y
+            // this.center.x = this.center.x + this.velocity.y;
+            // this.center.x = this.center.x + this.velocity.y;
+            // taking center.x and adding on velocity.x and then reassigning it to center.x. the center property will be moving in a linear fashion
+            this.center.x += this.velocity.y
+            // this.center.y = this.center.y + this.velocity.x;
+            this.center.y += this.velocity.x;
+            // wont see anything yet intill assigning it this.x, its moving linearly now and then want to base the circuler movement to center x and y
+            // to get a spinning effect can use Math.cos() and inside use a value of radians 
+            // Math.cos() is going to produce any number from -1 to 1 as the radianse increase inside this function
+            // orbitting while moving linearly
+            // this making the enemy do a swoop and repeat
+            // this.x = this.center.x + Math.cos(this.radians) * 20; 
+            // this.y = this.center.y + Math.sin(this.radians) * 20;
+            // this is making enemy spinning
+            this.x = this.center.x + Math.cos(this.radians) * 100;
+            this.y = this.center.y + Math.sin(this.radians) * 100;
+            // will give a value of zero, and want this pulsing back between -1 and 1
+            // and to do that need to make zero is a dynamic value and dynamic property
+            // so up beneath this.center add on the property this.radians = 0 for each enemy. the amount of degrees want to put in cos and sin function
+            // console.log(Math.sin(0))
+            // inputing the radians value in Math.sin(this.radians) that were increasing for each frame now this log is showing it pulsing from negative to positive
+            console.log(Math.sin(this.radians))
         }
 
     }
@@ -244,44 +274,44 @@ class Particle {
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
 function spawnEnemies() {
-    // setInterval(() => {
-    // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
-    // Enemy class takes in x y color and velocity
-    // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
-    // const y = Math.random() * canvas.height;
-    // for enemies off the screen to left needs to be at 0 minus its radius
-    // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
-    // to get a random number of radius from 0 to 30 Math.random() * 30
-    // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
-    const radius = Math.random() * (40 - 10) + 10;
-    let x;
-    let y;
-    if (Math.random() < .5) {
-        x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-        y = Math.random() * canvas.height;
-    } else {
-        x = Math.random() * canvas.width;
-        y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-    }
-    // using turnerary to get one of 2 values randomly 
-    // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
-    // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
-    // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
-    // const color = "purple"
-    // trying hue saturation lightness, its value is from 0 to 360
-    // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
-    // using back ticks for computation is template literal
-    const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
-    // canvas.width /2 and canvas.height /2 is where player is
-    // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
-    const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
-    const velocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
-    }
-    enemies.push(new Enemy(x, y, radius, color, velocity))
-    console.log(enemies, "enemy spawn")
-    // }, 1000);
+    setInterval(() => {
+        // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
+        // Enemy class takes in x y color and velocity
+        // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
+        // const y = Math.random() * canvas.height;
+        // for enemies off the screen to left needs to be at 0 minus its radius
+        // moved radius above x so it can be counted before x making it turn negative which will be off screen from the left
+        // to get a random number of radius from 0 to 30 Math.random() * 30
+        // the issue with is some circles radius are very small so went to set a minimum  of 5 by taking the radius - 5 warapping it around parenthesis then add the 5
+        const radius = Math.random() * (40 - 10) + 10;
+        let x;
+        let y;
+        if (Math.random() < .5) {
+            x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+            y = Math.random() * canvas.height;
+        } else {
+            x = Math.random() * canvas.width;
+            y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+        }
+        // using turnerary to get one of 2 values randomly 
+        // if the value of Math.random() is less than .5 since it produces 0 to 1 assign it to x or canvas.width + radius so its on the right
+        // const x = Math.random() < .5 ? 0 - radius : canvas.width + radius;
+        // const y = Math.random() < .5 ? 0 - radius : canvas.height + radius;
+        // const color = "purple"
+        // trying hue saturation lightness, its value is from 0 to 360
+        // start with 0, saturation how deep is this color 50%, lightness is how bright or dull this is 
+        // using back ticks for computation is template literal
+        const color = `hsl(${Math.random() * 360}, 50%, 50%)`;
+        // canvas.width /2 and canvas.height /2 is where player is
+        // whenever getting the distance from 2 points always want to subtract from destination(canvas.height /2 & canvas.width /2)
+        const angle = Math.atan2(canvas.width / 2 - x, canvas.height / 2 - y);
+        const velocity = {
+            x: Math.cos(angle),
+            y: Math.sin(angle)
+        }
+        enemies.push(new Enemy(x, y, radius, color, velocity))
+        console.log(enemies, "enemy spawn")
+    }, 1000);
 }
 
 
