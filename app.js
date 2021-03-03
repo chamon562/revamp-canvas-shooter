@@ -145,22 +145,26 @@ class Enemy {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         ctx.fillStyle = this.color;
-        ctx.strokeStyle = "white"
+        ctx.strokeStyle = this.color;
         ctx.fill();
     }
     update() {
         this.draw();
 
+        if ( this.type === "linear" ){
+                this.x = this.x + this.velocity.y;
+        this.y = this.y + this.velocity.x;
+        } else if (this.type === "homing"){
 
-        // this is for linear travel
-        // this.x = this.x + this.velocity.y;
-        // this.y = this.y + this.velocity.x;
         // how to get one enemy to start tracking player
         // have to get angle produced between one enemy and player
         // using atan2 to get that angle
         // Math.atan2() takes in 2 arguments and the x and y are the distances between enemy and player just on the x axis
         // in order to get the arguments for .atan2() can take players y coordinate minus this.y because this.y references one enemy y cooridinate
-        const angle = Math.atan2(player.x - this.x, player.y - this.x)
+        const angle = Math.atan2(player.x - this.x, player.y - this.y)
+        // this is for linear travel
+        // this.x = this.x + this.velocity.y;
+        // this.y = this.y + this.velocity.x;
         // the console log produces the angle enemies movement when the player moves
         console.log(angle)
         this.velocity = {
@@ -172,6 +176,8 @@ class Enemy {
         }
         this.x = this.x + this.velocity.y;
         this.y = this.y + this.velocity.x;
+        }
+
     }
 }
 // **** PARTICLE CLASS for impact to explode ****
@@ -218,7 +224,7 @@ class Particle {
 // need to create something that groups multiple enemies together then
 // draw them all out at the same time.
 function spawnEnemies() {
-    setInterval(() => {
+    // setInterval(() => {
     // whenever spawning new enemies take enemies array and push a new instance of enemy called new Enemy class
     // Enemy class takes in x y color and velocity
     // const x = Math.random() * canvas.width; //cause enemies to spawn randomly close to player so unfair want to spawn off screen
@@ -255,7 +261,7 @@ function spawnEnemies() {
     }
     enemies.push(new Enemy(x, y, radius, color, velocity))
     console.log(enemies, "enemy spawn")
-    }, 1000);
+    // }, 1000);
 }
 
 
