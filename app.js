@@ -136,6 +136,8 @@ class Enemy {
         // this.type = "spinning";
         // intitial type of enemy 
         this.type = "linear"
+        // if creating a new type of enemy have to determine how this enemy moves across the screen and that is done within update function
+        // this.type = "homingSpinning";
         // adding new property for enemey
         this.center = {
             // the center of our enemy will always be this.x and this.y
@@ -158,7 +160,14 @@ class Enemy {
         if (Math.random() < 0.25) {
             this.type = "homing";
             if (Math.random() < 0.5) {
-                this.type = "spinning"
+                this.type = "spinning";
+                // this is for homing spinning if Math.random hits 10% chance then homingspinning comes in
+                if (Math.random() < 0.10) {
+                    this.type = "homingSpinning";
+                }
+            }
+            if (score >= 2000) {
+                this.type = "homingSpinning";
             }
         }
     }
@@ -226,6 +235,35 @@ class Enemy {
             // console.log(Math.sin(0))
             // inputing the radians value in Math.sin(this.radians) that were increasing for each frame now this log is showing it pulsing from negative to positive
             console.log(Math.sin(this.radians))
+        } else if (this.type === "homingSpinning") {
+            const angle = Math.atan2(player.x - this.x, player.y - this.y);
+            console.log(angle)
+            this.velocity = {
+                x: Math.cos(angle),
+                y: Math.sin(angle)
+            }
+
+            // can be another enemy moving faster
+            // const angle = Math.atan2(player.x - this.x, player.y - this.y);
+            // console.log(angle)
+            // this.velocity = {
+            //     x: Math.cos(angle),
+            //     y: Math.sin(angle)
+            // }
+            // this.radians += Math.random() ;
+            // this.center.x += this.velocity.y
+            // this.center.y += this.velocity.x;
+            // this.x = this.center.x + Math.cos(this.radians) * 50  ;
+            // this.y = this.center.y + Math.sin(this.radians) * 50 ;
+
+            // cam maybe make a shield that spins around the player using projectile and this spinning property that has spawns 
+
+            // the smaller the number the slower the spin
+            this.radians += 0.08;
+            this.center.x += this.velocity.y
+            this.center.y += this.velocity.x;
+            this.x = this.center.x + Math.cos(this.radians) * 50;
+            this.y = this.center.y + Math.sin(this.radians) * 50;
         }
 
     }
@@ -311,7 +349,7 @@ function spawnEnemies() {
         }
         enemies.push(new Enemy(x, y, radius, color, velocity))
         console.log(enemies, "enemy spawn")
-    }, 1000);
+    }, 3000);
 }
 
 
@@ -341,6 +379,8 @@ let particles = [];
 let animationId;
 // initialize score to be 0
 let score = 0;
+// console.log("LINE 382 😸 ", score)
+
 // create init function to reset everything for the game
 function init() {
     player = new Player(x, y, 20, "tan", this.velocity);
