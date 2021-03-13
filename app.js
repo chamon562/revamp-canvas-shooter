@@ -123,6 +123,17 @@ class Projectile {
     }
 }
 
+class PowerUP{
+    constructor(x, y, velocity){
+        this.x = x;
+        this.y = y;
+        this.velocity = velocity;
+        this.width = 14;
+        this.height = 18;
+        this.radians = 0;
+    }
+}
+
 // **** ENEMY CLASS ****
 class Enemy {
     constructor(x, y, radius, color, velocity) {
