@@ -1,9 +1,7 @@
-// console.log("app.js conected") app is connected to the html
-// console.log(gsap);
-// first grab the canvas and set it to a variable
-// some power up for players 
-// defensive reflection shield that last for 5 seconds reflecting enemy projectile to bounce back
-
+// TODO: make homing missiles for player can use tracking formula in enemy class
+// TODO: when getting a powerUp the screen should freeze for like 2 seconds slide in picture of crazy cat face and then start shooting
+// TODO: make shield surrounding player could be a power up last for 5 seconds that spins aroudn him destroy enimes that come near it
+// TODO: powerUP that could be a bomb or on cool down when grabbed destroyse everything on screen at that current frame
 
 const canvas = document.querySelector("canvas");
 // console.log(canvas);
