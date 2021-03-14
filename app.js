@@ -39,7 +39,7 @@ class Player {
   // each time i create a new player will give player all these individual properties to differentiate it
   // from other players I might create
   // whenever I create new players I add new proprerties on to that new instance of the player
-  constructor(x, y, radius, color ) {
+  constructor(x, y, radius, color) {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -50,7 +50,7 @@ class Player {
     };
     // add property called this.friction
     this.friction = 0.99;
-    this.powerUp = ""
+    this.powerUp = "";
   }
   draw() {
     ctx.beginPath();
@@ -64,8 +64,6 @@ class Player {
     // to create a physics slow down for player to slow down over time friction.
     this.velocity.x *= this.friction;
     this.velocity.y *= this.friction;
-    this.x = this.x + this.velocity.x;
-    this.y = this.y + this.velocity.y;
 
     // conditionals to stop player from going past screen
     if (
@@ -85,6 +83,18 @@ class Player {
       this.velocity.y = 0;
     }
   }
+
+  shoot(mouse, color = "white") {
+    const angle = Math.atan2(mouse.y - this.y, mouse.x - this.x);
+    const velocity = {
+      x: Math.cos(angle) * 5,
+      y: Math.sin(angle) * 5,
+    };
+
+    projectilesArr.push(new Projectile(player.x, player.y, 5, color, velocity));
+  }
+
+  // shootAudio here
 }
 
 // ******** SHOOT PROJECTILES FROM MY PLAYER ********
