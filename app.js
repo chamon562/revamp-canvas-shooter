@@ -2,6 +2,12 @@
 // TODO: when getting a powerUp the screen should freeze for like 2 seconds slide in picture of crazy cat face and then start shooting
 // TODO: make shield surrounding player could be a power up last for 5 seconds that spins aroudn him destroy enimes that come near it
 // TODO: powerUP that could be a bomb or on cool down when grabbed destroyse everything on screen at that current frame
+// TODO: Choose YOUR ALTER EGO show different cats you can choose out of. meow meow meoW
+// TODO: Button in the middle will be the super button and each cat would have its own super. have a meter based off projectiles impact filling up meter and then super pops in the middle of the screen.
+// TODO: cat characters MR GREY, Momma cat crystal, baby yellow
+// enemies are balls of yarn when they explode fire work or dust 
+// TODO: COMBO FARTS based off of seconds on kill if the player kills the next target within a 1 or 2 seconds the next sound should be a louder fart. more fart sounds. cat blaster,  
+// TODO: DLC different skins for your cat. head bands, hats, robo cat, conan cat, gangsta cat with a doo rag and a fat chain.
 const canvas = document.querySelector("canvas");
 // console.log(canvas);
 canvas.width = window.innerWidth;
@@ -23,6 +29,8 @@ const shootAudio = new Audio("audio/smallShot.wav");
 const hitAudio = new Audio("audio/quickThud.wav");
 const exlposionAUdio = new Audio("audio/quickFartNoReverb.mp3");
 const powerUpAudio = new Audio("audio/meowPowerUp.wav");
+const backgroundMusicAudio = new Audio("audio/backgroundMusic1.mp3");
+
 
 class Player {
   constructor(x, y, radius, color) {
@@ -298,7 +306,7 @@ let particles = [];
 let backgroundParticles = [];
 
 function init() {
-  player = new Player(x, y, 20, "tan");
+  startGameAudio.play((player = new Player(x, y, 20, "tan")));
   // let powerUp = new PowerUp(100, 100, { x: 1, y: 1 });
   powerUps = [];
   projectilesArray = [];
