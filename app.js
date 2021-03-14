@@ -39,7 +39,7 @@ class Player {
   // each time i create a new player will give player all these individual properties to differentiate it
   // from other players I might create
   // whenever I create new players I add new proprerties on to that new instance of the player
-  constructor(x, y, radius, color, velocity) {
+  constructor(x, y, radius, color ) {
     this.x = x;
     this.y = y;
     this.radius = radius;
@@ -50,6 +50,7 @@ class Player {
     };
     // add property called this.friction
     this.friction = 0.99;
+    this.powerUp = ""
   }
   draw() {
     ctx.beginPath();
@@ -129,7 +130,7 @@ class Projectile {
 }
 
 const powerUpImage = new Image();
-powerUpImage.src = "assets/lightning.png"
+powerUpImage.src = "assets/lightning.png";
 console.log(powerUpImage);
 class PowerUP {
   constructor(x, y, velocity) {
@@ -150,13 +151,13 @@ class PowerUP {
     ctx.rotate(this.radians);
     // translate it back to where it was by setting the ctx.translate to negative.
     ctx.translate(-this.x + this.width / 2, this.y + this.height / 2);
-    ctx.drawImage()
+    ctx.drawImage();
   }
 
-  update(){
-      this.draw();
-      this.x = this.x + this.velocity.x;
-      this.y = this.y + this.velocity.y;
+  update() {
+    this.draw();
+    this.x = this.x + this.velocity.x;
+    this.y = this.y + this.velocity.y;
   }
 }
 
@@ -406,7 +407,7 @@ let projectilesArr = [];
 // creating enemies array
 let enemies = [];
 let particles = [];
-
+let powerUps = [];
 let animationId;
 // initialize score to be 0
 let score = 0;
@@ -441,6 +442,13 @@ function animate() {
   // making player being drawn once whenever file loads and its being cleard over because calling ctx.clearRect() over and over
   playerMove();
   player.update();
+
+  powerUps.forEach((powerUp) => {
+    const distance = Math.hypot(player.x - powerUp.x, player.y - powerUp.y);
+    console.log(distance);
+    powerUp.update();
+  });
+
   // rendering partcles explosion on impact of projectile to enemy
   particles.forEach((particle, partIndex) => {
     if (particle.alpha <= 0) {
