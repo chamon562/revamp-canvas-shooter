@@ -167,6 +167,7 @@ class PowerUP {
   }
 
   update() {
+    this.radians += 0.5;
     this.draw();
     this.x = this.x + this.velocity.x;
     this.y = this.y + this.velocity.y;
