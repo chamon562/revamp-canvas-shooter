@@ -142,6 +142,7 @@ class Projectile {
 const powerUpImage = new Image();
 powerUpImage.src = "assets/lightning.png";
 console.log(powerUpImage);
+
 class PowerUP {
   constructor(x, y, velocity) {
     this.x = x;
@@ -162,6 +163,7 @@ class PowerUP {
     // translate it back to where it was by setting the ctx.translate to negative.
     ctx.translate(-this.x + this.width / 2, this.y + this.height / 2);
     ctx.drawImage();
+    ctx.restore();
   }
 
   update() {
