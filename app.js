@@ -2,11 +2,11 @@
 // TODO: when getting a powerUp the screen should freeze for like 2 seconds slide in picture of crazy cat face and then start shooting
 // TODO: make shield surrounding player could be a power up last for 5 seconds that spins aroudn him destroy enimes that come near it
 // TODO: powerUP that could be a bomb or on cool down when grabbed destroyse everything on screen at that current frame
-// TODO: Choose YOUR ALTER EGO show different cats you can choose out of. meow meow meoW
+// TODO: Choose YOUR ALTER EGO announcer momma cat! mr grey! show different cats you can choose out of. meow meow meoW
 // TODO: Button in the middle will be the super button and each cat would have its own super. have a meter based off projectiles impact filling up meter and then super pops in the middle of the screen.
 // TODO: cat characters MR GREY, Momma cat crystal, baby yellow
-// enemies are balls of yarn when they explode fire work or dust 
-// TODO: COMBO FARTS based off of seconds on kill if the player kills the next target within a 1 or 2 seconds the next sound should be a louder fart. more fart sounds. cat blaster,  
+// enemies are balls of yarn when they explode fire work or dust
+// TODO: COMBO FARTS based off of seconds on kill if the player kills the next target within a 1 or 2 seconds the next sound should be a louder fart. more fart sounds. cat blaster,
 // TODO: DLC different skins for your cat. head bands, hats, robo cat, conan cat, gangsta cat with a doo rag and a fat chain.
 const canvas = document.querySelector("canvas");
 // console.log(canvas);
@@ -29,8 +29,12 @@ const shootAudio = new Audio("audio/smallShot.wav");
 const hitAudio = new Audio("audio/quickThud.wav");
 const exlposionAUdio = new Audio("audio/quickFartNoReverb.mp3");
 const powerUpAudio = new Audio("audio/meowPowerUp.wav");
-const backgroundMusicAudio = new Audio("audio/backgroundMusic1.mp3");
-
+const backgroundMusicAudio = new Audio("audio/marshMallowBackgroundMusic.mp3");
+backgroundMusicAudio.loop = true;
+// contain all properties needed to effect the game
+const scene = {
+  active: false
+}
 
 class Player {
   constructor(x, y, radius, color) {
@@ -87,6 +91,7 @@ class Player {
     );
     // use cloneNode() this is a function that is going to clone the audio obejct and play that new clone
     // to play audio objects on top of each other with having to wait till audio file is done playing itself
+    
     shootAudio.cloneNode().play();
   }
 }
@@ -503,6 +508,7 @@ function animate() {
       cancelAnimationFrame(animationId);
       modalElement.style.display = "flex";
       bigScoreELement.innerHTML = score;
+      scene.active = false;
     }
     projectilesArray.forEach((projectile, projectileIndex) => {
       const distance = Math.hypot(
@@ -595,18 +601,26 @@ window.addEventListener("mouseup", () => {
 });
 
 window.addEventListener("click", ({ clientX, clientY }) => {
-  mouse.x = clientX;
-  mouse.y = clientY;
-  player.shoot(mouse);
-  shootAudio.play();
+  if(scene.active){
+    
+    mouse.x = clientX;
+    mouse.y = clientY;
+    player.shoot(mouse);
+  }
 });
 
 startGameBtn.addEventListener("click", () => {
+  
   init();
   animate();
   spawnEnemies();
   spawnPowerUps();
   modalElement.style.display = "none";
+  // scene.active is used for true when the game starts to have the sound of shoot but when over scene.active will equal false to stop any sound being played from clicking outside the modal start
+  scene.active = true;
+  // 125 seconds into the background song, can find an area in the song to start at
+  // backgroundMusicAudio.currentTime = 125;
+  backgroundMusicAudio.play();
 });
 
 addEventListener("keydown", ({ keyCode }) => {
