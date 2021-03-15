@@ -10,6 +10,7 @@
 // TODO: DLC different skins for your cat. head bands, hats, robo cat, conan cat, gangsta cat with a doo rag and a fat chain.
 const canvas = document.querySelector("canvas");
 // console.log(canvas);
+// when browser changes its width make sure setting current canvas.width to new inner width and height
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const ctx = canvas.getContext("2d");
@@ -33,8 +34,8 @@ const backgroundMusicAudio = new Audio("audio/marshMallowBackgroundMusic.mp3");
 backgroundMusicAudio.loop = true;
 // contain all properties needed to effect the game
 const scene = {
-  active: false
-}
+  active: false,
+};
 
 class Player {
   constructor(x, y, radius, color) {
@@ -91,7 +92,7 @@ class Player {
     );
     // use cloneNode() this is a function that is going to clone the audio obejct and play that new clone
     // to play audio objects on top of each other with having to wait till audio file is done playing itself
-    
+
     shootAudio.cloneNode().play();
   }
 }
@@ -299,10 +300,7 @@ class BackgroundParticle {
   }
 }
 
-const x = canvas.width / 2;
-const y = canvas.height / 2;
-
-let player = new Player(x, y, 20, "tan");
+let player;
 // let powerUp = new PowerUp(100, 100, { x: 1, y: 1 });
 let powerUps = [];
 let projectilesArray = [];
@@ -311,18 +309,21 @@ let particles = [];
 let backgroundParticles = [];
 
 function init() {
+  const x = canvas.width / 2;
+  const y = canvas.height / 2;
   startGameAudio.play((player = new Player(x, y, 20, "tan")));
   // let powerUp = new PowerUp(100, 100, { x: 1, y: 1 });
   powerUps = [];
   projectilesArray = [];
   enemies = [];
   particles = [];
-  score = 0;
-  scoreElement.innerHTML = score;
-  bigScoreELement.innerHTML = score;
 
+  // whenever init need to reset backgroundParticles to an empty array
+  backgroundParticles = [];
   // create a grid of backgroundParticles use for loops to loop through all of the canvas width
   // changed i to x
+  // this forloop is causing the game to lag because its constantly looping an push new backgroundParticles for each pixel each time resize
+
   for (let x = 0; x < canvas.width; x += 30) {
     for (let y = 0; y < canvas.height; y += 30) {
       backgroundParticles.push(new BackgroundParticle(x, y, 3, "white"));
@@ -601,16 +602,25 @@ window.addEventListener("mouseup", () => {
 });
 
 window.addEventListener("click", ({ clientX, clientY }) => {
-  if(scene.active){
-    
+  if (scene.active) {
     mouse.x = clientX;
     mouse.y = clientY;
     player.shoot(mouse);
   }
 });
 
+// listening for screen resizing to make sure player is spawned mid screen no matter when user resizes window
+// can use resize as an eventListener
+// whenever resizing screen re init intialize the game
+window.addEventListener("resize", () => {
+  // placing inside resize and making sure player is always spawned to new inner width and height by adding it to resize event listener
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  init();
+  // console.log("resize")
+});
+
 startGameBtn.addEventListener("click", () => {
-  
   init();
   animate();
   spawnEnemies();
@@ -618,6 +628,9 @@ startGameBtn.addEventListener("click", () => {
   modalElement.style.display = "none";
   // scene.active is used for true when the game starts to have the sound of shoot but when over scene.active will equal false to stop any sound being played from clicking outside the modal start
   scene.active = true;
+  score = 0;
+  scoreElement.innerHTML = score;
+  bigScoreELement.innerHTML = score;
   // 125 seconds into the background song, can find an area in the song to start at
   // backgroundMusicAudio.currentTime = 125;
   backgroundMusicAudio.play();
