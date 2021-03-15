@@ -6,7 +6,7 @@ So I target the brody*/
 }
 body{
     background: black;
+    /* stop scrolling and dragging for mobile devices to play game within boundries */
+    overflow: hidden;
 }
 
-/* canvas {
-} */

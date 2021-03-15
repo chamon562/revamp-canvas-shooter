@@ -8,6 +8,8 @@
 // enemies are balls of yarn when they explode fire work or dust
 // TODO: COMBO FARTS based off of seconds on kill if the player kills the next target within a 1 or 2 seconds the next sound should be a louder fart. more fart sounds. cat blaster,
 // TODO: DLC different skins for your cat. head bands, hats, robo cat, conan cat, gangsta cat with a doo rag and a fat chain.
+// TODO: IDeas for interactive background to fade on bass background music https://speckyboy.com/audio-visualization-code-snippets/
+
 const canvas = document.querySelector("canvas");
 // console.log(canvas);
 // when browser changes its width make sure setting current canvas.width to new inner width and height
@@ -311,7 +313,7 @@ let backgroundParticles = [];
 function init() {
   const x = canvas.width / 2;
   const y = canvas.height / 2;
-  startGameAudio.play((player = new Player(x, y, 20, "tan")));
+  player = new Player(x, y, 20, "tan");
   // let powerUp = new PowerUp(100, 100, { x: 1, y: 1 });
   powerUps = [];
   projectilesArray = [];
@@ -502,6 +504,7 @@ function animate() {
     enemy.update();
 
     const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+    // end game
     if (distance - enemy.radius - player.radius < 1) {
       console.log("end the game");
       endGameAudio.play();
@@ -510,6 +513,17 @@ function animate() {
       modalElement.style.display = "flex";
       bigScoreELement.innerHTML = score;
       scene.active = false;
+      // when touching something the modal pops back up for end game. can reuse this code to make a powerUp fly by animater with cat face
+      //  changing opacity to 1 to bring back modal
+      gsap.to("#white-modal-element", {
+        opacity: 1,
+        scale: 0.75,
+        duration: 0.1,
+        ease: "expo.in",
+        // onComplete: () => {
+        //   modalElement.style.display = "none";
+        // },
+      });
     }
     projectilesArray.forEach((projectile, projectileIndex) => {
       const distance = Math.hypot(
@@ -646,7 +660,7 @@ startGameBtn.addEventListener("click", () => {
   animate();
   spawnEnemies();
   spawnPowerUps();
-  modalElement.style.display = "none";
+  startGameAudio.play();
   // scene.active is used for true when the game starts to have the sound of shoot but when over scene.active will equal false to stop any sound being played from clicking outside the modal start
   scene.active = true;
   score = 0;
@@ -655,6 +669,17 @@ startGameBtn.addEventListener("click", () => {
   // 125 seconds into the background song, can find an area in the song to start at
   // backgroundMusicAudio.currentTime = 125;
   backgroundMusicAudio.play();
+  // animating the modal any time animating html elements good to use gsap
+  // https://greensock.com/ease-visualizer/ to get different visual effects of the modal to fade bouncing and all kinds of ways
+  gsap.to("#white-modal-element", {
+    opacity: 0,
+    scale: 0.75,
+    duration: 0.25,
+    ease: "expo.in",
+    onComplete: () => {
+      modalElement.style.display = "none";
+    },
+  });
 });
 
 addEventListener("keydown", ({ keyCode }) => {
