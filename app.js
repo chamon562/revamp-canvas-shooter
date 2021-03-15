@@ -601,6 +601,27 @@ window.addEventListener("mouseup", () => {
   mouse.down = false;
 });
 
+// eventListeners for mobile use TouchEvent there is no clientX or clientY
+// whenever use finger to touch screen going to call the content of touchstart function
+window.addEventListener("touchstart", (event) => {
+  console.log(event);
+  // going inside touches list and grabbing first object event.touches[0]
+  mouse.x = event.touches[0].clientX;
+  mouse.y = event.touches[0].clientY;
+
+  mouse.down = true;
+  console.log("touch start");
+});
+window.addEventListener("touchmove", (event) => {
+  mouse.x = event.touches[0].clientX;
+  mouse.y = event.touches[0].clientY;
+  console.log("touch move");
+});
+window.addEventListener("touchend", () => {
+  console.log("touch end");
+  mouse.down = false;
+});
+
 window.addEventListener("click", ({ clientX, clientY }) => {
   if (scene.active) {
     mouse.x = clientX;
