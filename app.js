@@ -470,6 +470,16 @@ function animate() {
     // when touching powerUp gain the machine gun power up
     if (distance - player.radius - powerUp.width / 2 < 1) {
       // powerUpaudio sound when touching a power UP
+      // use this code to pop a modal when grabbing the powerUp to create an animtion freeze like super with cat face fly by MEOW!
+      // modalElement.style.display = "flex";
+      // gsap.to("#white-modal-element", {
+      //   opacity: 1,
+      //   scale: 1,
+      //   duration: 0.25,
+      //   // whenever easing something back in use ease out
+      //   ease: "expo",
+      // });
+
       powerUpAudio.cloneNode().play();
       player.color = "#FFF500";
       console.log("powerUp touched");
@@ -510,6 +520,7 @@ function animate() {
       endGameAudio.play();
       // stops on the game screen
       cancelAnimationFrame(animationId);
+      // this brings the modalElement out to display to flex
       modalElement.style.display = "flex";
       bigScoreELement.innerHTML = score;
       scene.active = false;
@@ -517,12 +528,10 @@ function animate() {
       //  changing opacity to 1 to bring back modal
       gsap.to("#white-modal-element", {
         opacity: 1,
-        scale: 0.75,
-        duration: 0.1,
-        ease: "expo.in",
-        // onComplete: () => {
-        //   modalElement.style.display = "none";
-        // },
+        scale: 1,
+        duration: 0.25,
+        // whenever easing something back in use ease out
+        ease: "expo",
       });
     }
     projectilesArray.forEach((projectile, projectileIndex) => {
