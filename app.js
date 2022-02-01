@@ -39,6 +39,21 @@ const scene = {
   active: false,
 };
 
+// creating an image for the hero using the new Image Contructor object
+const heroImage = new Image()
+// setting the img src attributee to the rockat_Idle.png
+heroImage.src = 'assets/rocketKitty/Rockat_Idle.png'
+console.log(heroImage.src)
+// frameWidth, my sprite sheet is width:1100 x height:200 with 6 frames
+// so the idea is to cut out and grab only that 1st frame by noticing the height is 200
+// and since theres 6 frames to single them out take 1100 and divide by 6 to get me a number 183.3333 
+// so I rounded down
+// rows and columns are started at 0 like how I understand the first index of an array. 
+let frameWidth = 183;
+let frameHeight= 200;
+let row = 0
+let column = 0
+console.log(column * frameWidth)
 class Player {
   constructor(x, y, radius, color) {
     this.x = x;
@@ -57,6 +72,9 @@ class Player {
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     ctx.fillStyle = this.color;
     ctx.fill();
+    // drawing the Image
+    ctx.drawImage(heroImage, column *frameWidth, row * frameHeight, frameWidth,frameHeight, this.x -120 , this.y - 116, frameWidth, frameHeight )
+
   }
 
   update() {
@@ -124,7 +142,7 @@ class Projectile {
 
 const powerUpImage = new Image();
 powerUpImage.src = "assets/lightning.png";
-console.log(powerUpImage);
+console.log(powerUpImage.src);
 
 class PowerUp {
   constructor(x, y, velocity) {
@@ -211,6 +229,7 @@ class Enemy {
         x: Math.cos(angle),
         y: Math.sin(angle),
       };
+      
       this.x = this.x + this.velocity.x;
       this.y = this.y + this.velocity.y;
     } else if (this.type === "spinning") {
@@ -313,7 +332,7 @@ let backgroundParticles = [];
 function init() {
   const x = canvas.width / 2;
   const y = canvas.height / 2;
-  player = new Player(x, y, 20, "tan");
+  player = new Player(x, y, 40, "tan");
   // let powerUp = new PowerUp(100, 100, { x: 1, y: 1 });
   powerUps = [];
   projectilesArray = [];
@@ -539,8 +558,11 @@ function animate() {
         projectile.x - enemy.x,
         projectile.y - enemy.y
       );
-      // when projectiles touch enemy
-      if (distance - enemy.radius - projectile.radius < 1) {
+      // hit enemey
+      // when projectiles touch enemy 2 close projectiles is causing this code to be run twice making other enemies dissapear when they arent getting hit
+      // instead of less than 1 pixel try changing to .25
+      // now the distance between enemy and projectile has to be less than .25 to remove or shrink enemy
+      if (distance - enemy.radius - projectile.radius < 0.25) {
         for (let i = 0; i < enemy.radius * 2; i++) {
           particles.push(
             new Particle(
@@ -562,8 +584,8 @@ function animate() {
 
           // increase score
           score += 55;
-          createScoreLabel(projectile, 55);
           scoreElement.innerHTML = score;
+          createScoreLabel(projectile, 55);
           gsap.to(enemy, { radius: enemy.radius - 10 });
           setTimeout(() => {
             projectilesArray.splice(projectileIndex, 1);
