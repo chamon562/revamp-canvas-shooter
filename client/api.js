@@ -22,18 +22,18 @@ const getScore = async () => {
       const headingName = document.createElement("h1");
       const pScore = document.createElement("h2");
       headingName.innerHTML = `#${index + 1}  ${item.name}`;
-      headingName.style["color"] = `${
-        index === 0 ? "rgb(231 151 4)" : "#04e7e7"
-      }`;
+      headingName.style["color"] = `${index === 0 ? "#B026FF" : "#04e7e7"}`;
       headingName.innerHTML = `${
         index === 0
           ? "#" + (index + 1) + " 👑" + item.name
           : "#" + (index + 1) + " " + item.name
       }`;
       headingName.style["font-size"] = `${index === 0 ? "30px" : "30px"}`;
-    
+
       pScore.innerHTML = item.score.toLocaleString("en-US");
-      pScore.style["color"] = "	rgb(100, 226, 100)";
+      pScore.style["color"] = ` ${
+        index === 0 ? "#B026FF" : "rgb(100, 226, 100)"
+      }`;
       pScore.style["text-align"] = "end";
       pScore.style["font-size"] = "25px";
       pScore.style["font-weight"] = "900";
@@ -90,16 +90,16 @@ closeIcon.addEventListener("mousedown", () => {
   });
 });
 
-const createScore = async (id, score) => {
-  const message = await getScore(id, score);
-  const form = document.querySelector("form");
-  const span = document.createElement("span");
-  span.style.color = "red";
-  span.textContent = message.result;
-  form.appendChild(span);
-};
 window.addEventListener("load", getScore());
 
+// const createScore = async (id, score) => {
+//   const message = await getScore(id, score);
+//   const form = document.querySelector("form");
+//   const span = document.createElement("span");
+//   span.style.color = "red";
+//   span.textContent = message.result;
+//   form.appendChild(span);
+// };
 {
   /* <div class="event" id="NFL-1234">
     <span id="NFL-1234-status">FINAL</span><br />
