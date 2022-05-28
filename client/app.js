@@ -741,7 +741,7 @@ function animate() {
       cancelAnimationFrame(animationId);
       // this brings the modalElement out to display to flex
       modalElement.style.display = "flex";
-      bigScoreELement.innerHTML = score.toLocaleString('en-US');
+      bigScoreELement.innerHTML = score.toLocaleString("en-US");
       scene.active = false;
       // postData(score)
       // USE THIS TO POP UP THE NAME INPUT FOR LEADER BOARD
@@ -1010,7 +1010,10 @@ boardForm.addEventListener("submit", (e) => {
       "Content-type": "application/json",
     },
     body: JSON.stringify({
-      name: document.getElementById("board-name").value,
+      name:
+        document.getElementById("board-name").value === ""
+          ? "CAP"
+          : document.getElementById("board-name").value,
       score: score,
     }),
   })
