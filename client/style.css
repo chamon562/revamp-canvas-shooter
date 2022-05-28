@@ -1,0 +1,38 @@
+/* removing the default margin:8px that comes with the canvas
+So I target the brody*/
+* {
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+body {
+  background: black;
+  /* stop scrolling and dragging for mobile devices to play game within boundries */
+  overflow: hidden;
+}
+
+#board-element {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.863);
+}
+#white-modal-element {
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.863);
+}
+
+#close-icon {
+  display: flex;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  fill: rgba(255, 255, 255, 0.908);
+}
+
+#close-icon:hover {
+  transform: rotate(90deg);
+}
