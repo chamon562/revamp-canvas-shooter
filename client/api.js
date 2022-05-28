@@ -28,8 +28,8 @@ const getScore = async () => {
           ? "#" + (index + 1) + " 👑" + item.name
           : "#" + (index + 1) + " " + item.name
       }`;
-      headingName.style["font-size"] = `${index === 0 ? "30px" : "30px"}`;
-
+      headingName.style["font-size"] = "30px";
+      headingName.style["font-weight"] = `${index === 0 ? "900" : ""}`
       pScore.innerHTML = item.score.toLocaleString("en-US");
       pScore.style["color"] = ` ${
         index === 0 ? "#B026FF" : "rgb(100, 226, 100)"
