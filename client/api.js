@@ -22,10 +22,17 @@ const getScore = async () => {
       const headingName = document.createElement("h1");
       const pScore = document.createElement("h2");
       headingName.innerHTML = `#${index + 1}  ${item.name}`;
-      headingName.style["color"] = `${index === 0 ? "rgb(231 151 4)" : "#04e7e7"}`;
+      headingName.style["color"] = `${
+        index === 0 ? "rgb(231 151 4)" : "#04e7e7"
+      }`;
+      headingName.innerHTML = `${
+        index === 0
+          ? "#" + (index + 1) + "👑" + item.name
+          : "#" + (index + 1) + " " + item.name
+      }`;
       headingName.style["font-size"] = "30px";
       headingName.style["text-align"] = "center";
-      pScore.innerHTML = item.score.toLocaleString('en-US');
+      pScore.innerHTML = item.score.toLocaleString("en-US");
       pScore.style["color"] = "	rgb(100, 226, 100)";
       pScore.style["text-align"] = "center";
       pScore.style["font-size"] = "25px";
@@ -50,7 +57,6 @@ const getScore = async () => {
 // player name without this, would have to load page manuelly after submit
 //  to see updated user
 const refreshModal = () => {
-  
   document.location.reload(true);
 };
 
