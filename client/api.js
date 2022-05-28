@@ -27,14 +27,14 @@ const getScore = async () => {
       }`;
       headingName.innerHTML = `${
         index === 0
-          ? "#" + (index + 1) + "👑" + item.name
+          ? "#" + (index + 1) + " 👑" + item.name
           : "#" + (index + 1) + " " + item.name
       }`;
-      headingName.style["font-size"] = "30px";
-      headingName.style["text-align"] = "center";
+      headingName.style["font-size"] = `${index === 0 ? "30px" : "30px"}`;
+    
       pScore.innerHTML = item.score.toLocaleString("en-US");
       pScore.style["color"] = "	rgb(100, 226, 100)";
-      pScore.style["text-align"] = "center";
+      pScore.style["text-align"] = "end";
       pScore.style["font-size"] = "25px";
       pScore.style["font-weight"] = "900";
 

@@ -18,6 +18,13 @@ body {
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.863);
 }
+#board-content > h1 {
+  transition: 0.3s ease-in-out;
+}
+#board-content > h1:hover {
+  /* transform: scale(1.1); */
+  transform: translateX(20px);
+}
 #white-modal-element {
   background: rgba(255, 255, 255, 0.09);
   border-radius: 16px;
