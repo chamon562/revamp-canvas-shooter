@@ -21,9 +21,8 @@ const getScore = async () => {
       const boardContent = document.querySelector("#board-content");
       const headingName = document.createElement("h1");
       const pScore = document.createElement("h2");
-
       headingName.innerHTML = `#${index + 1}  ${item.name}`;
-      headingName.style["color"] = "#04e7e7";
+      headingName.style["color"] = `${index === 0 ? "rgb(231 151 4)" : "#04e7e7"}`;
       headingName.style["font-size"] = "30px";
       headingName.style["text-align"] = "center";
       pScore.innerHTML = item.score.toLocaleString('en-US');
