@@ -229,6 +229,7 @@ class Player {
       this.velocity.y = 0;
     }
   }
+
   shoot(mouse, color = "white") {
     const angle = Math.atan2(mouse.y - this.y, mouse.x - this.x);
     const velocity = {
@@ -361,8 +362,8 @@ class Explosion {
   }
 }
 
-let ballEnemy = new Image();
-ballEnemy.src = "assets/ballYarn.png";
+// let ballEnemy = new Image();
+// ballEnemy.src = "assets/ballYarn.png";
 class Enemy {
   constructor(x, y, radius, color, velocity) {
     this.x = x;
@@ -401,13 +402,13 @@ class Enemy {
     ctx.fillStyle = this.color;
     ctx.fill();
 
-    ctx.drawImage(
-      ballEnemy,
-      this.x - 20,
-      this.y - 20,
-      this.radius,
-      this.radius
-    );
+    // ctx.drawImage(
+    //   ballEnemy,
+    //   this.x ,
+    //   this.y ,
+    //   this.radius,
+    //   this.radius
+    // );
   }
 
   update() {
@@ -551,7 +552,7 @@ function init() {
 
 function spawnEnemies() {
   // setInterval(() => {
-  const radius = Math.random() * (40 - 20) + 25;
+  let radius = Math.random() * (40 - 20) + 25;
   // const radius =  25;
   // console.log("enemy spawning");
   let x;

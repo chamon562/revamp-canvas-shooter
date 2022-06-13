@@ -3,8 +3,11 @@ let players;
 
 const boardBtn = document.querySelector("#board-button");
 const boardModal = document.querySelector("#board-modal-element");
+const howBtn = document.querySelector("#how-button");
+const howModal = document.querySelector("#how-modal-element");
 const boardEl = document.getElementById("board-element");
 const closeIcon = document.querySelector("#close-icon");
+const howCloseIcon = document.querySelector("#how-close-icon");
 const boardName = document.querySelector("#board-name");
 const boardScore = document.querySelector("#board-score");
 console.log(boardName);
@@ -29,7 +32,7 @@ const getScore = async () => {
           : "#" + (index + 1) + " " + item.name
       }`;
       headingName.style["font-size"] = "30px";
-      headingName.style["font-weight"] = `${index === 0 ? "900" : ""}`
+      headingName.style["font-weight"] = `${index === 0 ? "900" : ""}`;
       pScore.innerHTML = item.score.toLocaleString("en-US");
       pScore.style["color"] = ` ${
         index === 0 ? "#B026FF" : "rgb(100, 226, 100)"
@@ -56,9 +59,6 @@ const getScore = async () => {
 // this is used to refresh the page to try and solve the update to show
 // player name without this, would have to load page manuelly after submit
 //  to see updated user
-const refreshModal = () => {
-  document.location.reload(true);
-};
 
 boardBtn.addEventListener("mousedown", () => {
   // console.log("click");
@@ -90,6 +90,36 @@ closeIcon.addEventListener("mousedown", () => {
   });
 });
 
+howBtn.addEventListener("mousedown", () => {
+  // console.log("click");
+  howModal.style.display = "block";
+
+  //   // animating the modal any time animating html elements good to use gsap
+  //   // https://greensock.com/ease-visualizer/ to get different visual effects of the modal to fade bouncing and all kinds of ways
+  gsap.to("#how-modal-element", {
+    opacity: 1,
+    scale: 0.9,
+    duration: 0.25,
+    ease: "expo.out",
+
+    onComplete: () => {
+      howModal.style.display = "block";
+    },
+  });
+});
+
+howCloseIcon.addEventListener("mousedown", () => {
+  howModal.style.display = "none";
+  gsap.to("#how-modal-element", {
+    opacity: 0,
+    duration: 0.25,
+    ease: "expo.out",
+    onComplete: () => {
+      howModal.style.display = "none";
+    },
+  });
+});
+
 window.addEventListener("load", getScore());
 
 // const createScore = async (id, score) => {
@@ -107,7 +137,7 @@ window.addEventListener("load", getScore());
     <strong class="score" id="NFL-1234-away-score">26</strong><br />
     <img src="logo url here">San Francisco 
     <strong class="score" id="NFL-1234-home-score">23</strong><br />
-</div> */
+    </div> */
 }
 
 // function updateAllEvents() {
@@ -131,3 +161,6 @@ window.addEventListener("load", getScore());
 
 // using 10000 runs the task every 10 seconds
 // setInterval(updateAllEvents, 10000);
+const refreshModal = () => {
+  document.location.reload(true);
+};
