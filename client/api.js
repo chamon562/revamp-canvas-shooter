@@ -1,4 +1,5 @@
-let url = "http://localhost:8000/api/score/all-players";
+// let url = "http://localhost:8000/api/score/all-players";
+let url = "https://kitty-shooter-server.herokuapp.com/";
 let players;
 
 const boardBtn = document.querySelector("#board-button");
