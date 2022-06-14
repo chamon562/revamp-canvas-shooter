@@ -1,13 +1,10 @@
 // let url = "http://localhost:8000/api/score/all-players";
-let url = "https://kitty-shooter-server.herokuapp.com/";
+// Issue the data wasnt showing because heroku base url was not hitting the correct endpoint
+// everything was connected successfully and it just needed to be https://kitty-shooter-server.herokuapp.com/api/score/all-players
+// to get all the players and not just https://kitty-shooter-server.herokuapp.com/
+let url = "https://kitty-shooter-server.herokuapp.com/api/score/all-players";
 let players;
-// fetch(url)
-//   .then((res) => {
-//     return res.json();
-//   })
-//   .then((data) => {
-//     console.log(data);
-//   }).catch(error => console.log(error))
+
 const boardBtn = document.querySelector("#board-button");
 const boardModal = document.querySelector("#board-modal-element");
 const howBtn = document.querySelector("#how-button");
@@ -23,6 +20,7 @@ const getScore = async () => {
   try {
     const result = await fetch(url);
     const data = await result.json();
+    console.log(data);
 
     data.map((item, index) => {
       // console.log(index);
