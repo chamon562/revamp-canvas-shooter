@@ -28,7 +28,7 @@ db.once("error", (error) => {
 app.use("/api/score", scoreBoard);
 
 app.get("/", (req, res) => {
-  res.send("Backend running for your score board");
+  res.send("Backend server running for your score board");
 });
 
 const PORT = process.env.PORT;
